@@ -1,0 +1,55 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		
+		{
+			"name": "Tests Download and Run",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/tests.py",
+			"interactiveTerminal": false
+		},
+		{
+
+			"name": "Main Download and Run",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/main.py",
+			"url": "http://localhost:8080",
+			"interactiveTerminal": false
+		}, 
+		{
+			"name": "ilan-brother",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/ilan-brother.py",
+			"interactiveTerminal": false
+		}, 
+		{
+			"name": "Wall Download and Run",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/wall.py",
+			"interactiveTerminal": false
+		}
+		, 
+		{
+			"name": "test Download and Run",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/test.py",
+			"interactiveTerminal": false
+		}
+		, 
+		{
+			"name": "ready Download and Run",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/ready.py",
+			"interactiveTerminal": false
+		}
+	]
+}
