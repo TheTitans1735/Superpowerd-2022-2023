@@ -3,7 +3,7 @@ from robot import *
 
 ilan = Robot()
 ilan.reset_wall_bottom_right()
-ilan.beep()
+ilan.say("takme`")
 
 
 
@@ -69,7 +69,14 @@ def up_run():
     pass
 
 def down_run():
-    pass
+    ilan.say("ish mi billy")
+    ts = 250
+    while True:
+        ilan.pid_gyro_until_color(stop_color = Color.BLACK, Ts = ts, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02)
+        time.sleep(1)
+        ilan.pid_gyro(Forward_Is_True=False, Td=50)
+        ts += 50
+    
 
 
 TEXT_MENU = """Choose Run: 

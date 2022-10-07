@@ -370,7 +370,7 @@ class Robot:
         PID Gyro נסיעה ישרה עד זיהוי קו באמצעות
         """
         
-        direction_indicator = -1
+        direction_indicator = 1
         speed_indicator = -1       #משתנה שנועד כדי לכפול אותו במהירות ובתיקון השגיאה כדי שנוכל לנסוע אחורה במידת הצורך  
 
         if Forward_Is_True:             #אם נוסעים קדימה - תכפול באחד. אחורה - תכפול במינוס אחד
