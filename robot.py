@@ -393,8 +393,7 @@ class Robot:
         derivative = 0 
         lastError = 0 
 
-        while (self.color_sensor_right.color() != stop_color or self.color_sensor_left.color() != stop_color):
-            self.check_forced_exit()
+        while self.color_sensor_right.color() != stop_color or self.color_sensor_left.color() != stop_color:
 
             # P - Proportional
             # תיקון השגיאה המיידית
@@ -663,7 +662,7 @@ class Robot:
 
     def straighten_on_black(self, speed = 90, drive_forward = True):
         """
-        התיישרות על קו שחור
+         התיישרות על קו שחור
         """
         
         # הגדרת המהירות בהתאם לרצון לנסוע קדימה / אחורה
@@ -1024,6 +1023,44 @@ class Robot:
 
         # הבקר מקריא את הטקסט
         self.ev3.speaker.say(text)
+        
 
 
+    def  align_on_line(self, speed:100):
+        if Color.upper() == "WHITE":
+            left_steering_motor_exit_exec = lambda: self.ColorSensors.left_sensor.reflection() > Color.WHITE
+            right_steering_motor_exit_exec = lambda: self.ColorSensors.right_sensor.reflection() > Color.WHITE
+        elif Color.upper() == "BLACK":
+            left_steering_motor_exit_exec = lambda: self.ColorSensors.left_sensor.reflection() < Color.BLACK
+            right_steering_motor_exit_exec = lambda: self.ColorSensors.right_sensor.reflection() < Color.BLACK
+        else:
+            raise Exception("Invalid color for Robot.square_line()")
+            
+        for repetition in range(2):
+            self.Motors.left_steering_motor.run(speed)
+            self.Motors.right_steering_motor.run(speed)
+            left_ok = False
+            right_ok = False
+            while self.active:
+                # Keep moving the left motor until it reaches the line
+                if left_steering_motor_exit_exec():
+                    left_ok = True
+                    self.Motors.left_steering_motor.hold()
+
+                # Keep moving the right motor until it reaches the line
+                if right_steering_motor_exit_exec():
+                    right_ok = True
+                    self.Motors.right_steering_motor.hold()
+
+                # If both sensors are on the line, go backwards and repeat the process one more time
+                if left_ok and right_ok:
+                    if repetition == 0:
+                        self.drive(-5 if speed > 0 else 5, speed_kp=1.2)
+                    break
+
+
+        self.Motors.left_steering_motor.hold()
+        self.Motors.right_steering_motor.hold()
+    
+    
 ##### The End :) #####

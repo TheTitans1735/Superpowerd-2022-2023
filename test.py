@@ -57,10 +57,12 @@ def center_run():
     # (: זה הג'וק שהקפיץ את השפריץ של המיץ לעציץ על השפיץ של הקפיץ בחריץ המסוכן האור ההר
     # ilan.say("ze hajuk shehekpitz et hashpritz shel hamitlahatzitz al hashpitz shel hakfitz baharitz hamesukan behor hahar")
 
+def fast_to_slow_stop(ts1,td1,ts2,td2):
+    ts =300
 
 def left_run():
-    pass
-
+    ilan.say(" ish mi billy otten dotten")
+    ilan.straighten_on_black()
 def right_run():
     ilan.run_straight(200)
     ilan.turn(90,180)
@@ -69,13 +71,11 @@ def up_run():
     pass
 
 def down_run():
-    ilan.say("ish mi billy")
-    ts = 250
-    while True:
-        ilan.pid_gyro_until_color(stop_color = Color.BLACK, Ts = ts, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02)
-        time.sleep(1)
-        ilan.pid_gyro(Forward_Is_True=False, Td=50)
-        ts += 50
+    ilan.say("start")
+    ilan.move_wall_to_point(430, 370)
+    ilan.pid_gyro(30, 300)
+    ilan.pid_gyro_until_color(stop_color = Color.BLACK, Ts = 20, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02)
+        
     
 
 
