@@ -12,7 +12,7 @@ ilan.beep()
 # Reset the wall & values
 ilan.reset_wall()
 
-print("---")
+print("---")    
 
 default_speed = 100
 speed = default_speed # Start with default speed

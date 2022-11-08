@@ -25,86 +25,33 @@ class Robot:
 
         ## Ilan's Configuration ##
         # motors
-        self.left_motor = Motor(Port.C, Direction.COUNTERCLOCKWISE)
-        self.right_motor = Motor(Port.B, Direction.COUNTERCLOCKWISE)
+        self.left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
+        self.right_motor = Motor(Port.C, Direction.COUNTERCLOCKWISE)
 
         # robot
-        self.robot = DriveBase(self.left_motor, self.right_motor, wheel_diameter=62.4, axle_track=122)
+        self.robot = DriveBase(self.left_motor, self.right_motor, wheel_diameter=62.4, axle_track=75)
         self.robot.settings(straight_speed=200, straight_acceleration=100, turn_rate=100)
 
         # color sensors
-        self.color_sensor_left = ColorSensor(Port.S2)
-        self.color_sensor_right = ColorSensor(Port.S1)
+        self.color_sensor_left = ColorSensor(Port.S1)
+        self.color_sensor_right = ColorSensor(Port.S2)
 
         # gyro sensor
         self.gyro_sensor= GyroSensor(Port.S3)
 
-        # wall's motors
-        self.wall_x_motor = Motor(Port.D) 
-        self.wall_y_motor = Motor(Port.A,Direction.COUNTERCLOCKWISE) 
+        # medium motors
+        self.left_medium_motor = Motor(Port.B) 
+        self.right_medium_motor = Motor(Port.A) 
 
-        # define constant traits - wall's max angles
-        self.WALL_MAX_ANGLE_X = 860
-        self.WALL_MAX_ANGLE_Y = 740
+        
         
 
 
-    ##### RESET WALL #####
-
-    def reset_wall(self):
-        """"
-        מאפס את הקיר לצד שמאל למטה
-        """
-
-        # define x & y motor's speed
-        speed_x = -800
-        speed_y = -1200
-
-        # move the wall to max values
-        self.wall_y_motor.run_until_stalled(speed_y,Stop.HOLD, duty_limit=75)
-        self.wall_x_motor.run_until_stalled(speed_x,Stop.HOLD, duty_limit=15)
-        wait(100)
-
-        # make wall's 0 angle current angle
-        self.wall_x_motor.reset_angle(0)
-        self.wall_y_motor.reset_angle(0)
-
-        # enter the current wall values into the file
-        self.push_wall_values()
-        
-        # write current angles
-        self.write("x = " + str(self.wall_x_motor.angle()) + "\ny = " + str(self.wall_y_motor.angle()))
+    ##### RE
 
 
 
-    ##### RESET WALL BOTTON RIGHT #####
-
-    def reset_wall_bottom_right(self):
-        """"
-        מאפס את הקיר לצד ימין למטה
-        """
-
-        # define x & y motor's speed
-        speed_x = 800
-        speed_y = -1200
-        
-        # move the wall to max values
-        self.wall_y_motor.run_until_stalled(speed_y,Stop.HOLD, duty_limit=75)
-        self.wall_x_motor.run_until_stalled(speed_x,Stop.HOLD, duty_limit=15)
-        wait(100)
-
-        # make wall's 0 angle current angle
-        self.wall_x_motor.reset_angle(self.WALL_MAX_ANGLE_X)
-        self.wall_y_motor.reset_angle(0)
-
-        # enter the current wall values into the file
-        self.push_wall_values()
-        
-        # write current angles
-        self.write("x = " + str(self.wall_x_motor.angle()) + "\ny = " + str(self.wall_y_motor.angle()))
-            
-
-        
+   
     ##### UPDATE WALL'S CURRENT VALUES #####
 
     def update_angles_from_file(self):
@@ -125,68 +72,13 @@ class Robot:
 
 
 
-    ##### PUSH WALL'S CURRENT VALUES #####
-
-    def push_wall_values(self):
-        """
-        כתיבת ערך הפוזיציה הנוכחית של הקיר בקובץ טקסט    
-        """
-        # with open('wall_values.txt', 'w+') as f:
-        #     wait(50)
-        #     f.write(str(self.wall_x_motor.angle()) + "," + str(self.wall_y_motor.angle()))
-
-        pass
+    ##### PUSH WALL'S CURRENT VALUES #####pass
     
     
 
     ##### MOVE WALL TO POINT #####
 
-    def move_wall_to_point(self, x:int,y:int, speed=-1200, x_wait = True, y_wait = True):
-        """
-        הזזת הקיר לנקודה מסויימת בטווח התנועה שלו
-        """
-        # get the wall's current position from file
-        self.update_angles_from_file()
-
-        # make sure wall does not try to extend beyond boundries:
-        # define minimum and maximum values
-        x = min( x, self.WALL_MAX_ANGLE_X)
-        y = min( y, self.WALL_MAX_ANGLE_Y)
-        x = max( x, 10)
-        y = max( y, 10)
-        
-        # move motors until wall reaches the target position
-        # motors can move together or continue to next function based on wait paremiter 
-        self.wall_x_motor.run_target(speed, x, Stop.BRAKE, wait = x_wait)
-        self.wall_y_motor.run_target(speed, y, Stop.BRAKE, wait = y_wait) 
-        
-        
-
-        # print current wall values
-        print("x = " + str(self.wall_x_motor.angle()) + ", y = "  + str(self.wall_y_motor.angle()))
-        
-
-
-    ##### MEASURE WALL MAX VALUES #####
-
-    def measure_wall_max_values(self):
-        """"
-        פונקציה שבעזרתה בדקנו מה האיקס והוואי של הקיר בפינות
-        """
-
-        self.reset_wall()
-
-        # run the motor to extreme
-        max_x = self.wall_x_motor.run_until_stalled(800,Stop.HOLD, duty_limit=20)
-        max_y = self.wall_y_motor.run_until_stalled(800,Stop.HOLD, duty_limit=1)
-
-        self.wall_y_motor.stop()
-        self.wall_x_motor.stop()
-
-        # print current wall values
-        self.write("max x= " + str(max_x) + " max y= " + str(max_y))
-
-
+    
 
     ##### PID Gyro #####
 
@@ -255,111 +147,10 @@ class Robot:
             lastError = error  
         
         # עצור את הרובוט
+        
+        self.left_motor.hold()
+        self.right_motor.hold()
         self.robot.stop()
-
-
-
-    ##### PID GYRO WHILE MOVE WALL #####
-
-    def PID_while_move_wall(self, x:int, y:int, drive_distance, drive_speed = 150, seconds_to_start_wall = 0, wall_speed =- 1200,
-                            Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
-        """
-        PID Gyro הזזת הקיר תוך כדי נסיעה
-        """
-        
-        self.update_angles_from_file()
-
-        # define minimum and maximum wall values
-        x = min( x, self.WALL_MAX_ANGLE_X)
-        y = min( y, self.WALL_MAX_ANGLE_Y)
-        x = max( x, 10)
-        y = max( y, 10)
-        # add 10 because y axis might get stuck while going down
-        
-
-        ## PID Gyro Part ##
-
-        direction_indicator = -1
-        speed_indicator = -1       #משתנה שנועד כדי לכפול אותו במהירות ובתיקון השגיאה כדי שנוכל לנסוע אחורה במידת הצורך   
-
-        if Forward_Is_True:             #אם נוסעים קדימה - תכפול באחד. אחורה - תכפול במינוס אחד
-            direction_indicator = -1
-            speed_indicator = 1   
-
-        # reset
-        self.robot.reset() 
-        self.gyro_sensor.reset_angle(0)
-
-        # Td = 1000 # target distance
-        # Ts = 150 # target speed of robot in mm/s
-
-        # Kp = 3 #  the Constant 'K' for the 'p' proportional controller
-        # Ki = 0.025 #  the Constant 'K' for the 'i' integral term
-        # Kd = 3 #  the Constant 'K' for the 'd' derivative term
-
-        # initialize
-        integral = 0 
-        derivative = 0 
-        lastError = 0 
-
-        # start stopwatch to use if user wants to start moving the wall a couple seconds after starting to drive
-        sw_for_wall_timing = StopWatch()
-
-        ## Start Loop ##
-        while (abs(self.robot.distance()) < drive_distance * 10 or self.wall_x_motor.speed() != 0 and self.wall_y_motor.speed() != 0):
-            self.check_forced_exit()
-
-            # P - Proportional
-            # תיקון השגיאה המיידית
-            # הגדר את השגיאה כזווית הנוכחית של הג'יירו
-            error = self.gyro_sensor.angle() 
-
-            print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
-
-            # I - Integral
-            # תיקון השגיאה המצטברת
-            # אם ישנה שגיאה, הוסף אותה לאינטגרל
-            if (error == 0):
-                integral = 0
-
-            else:
-                integral = integral + error    
-
-            # D - Derivative
-            # תיקון השגיאה העתידית
-            # הגדר את הדריבטיב כשגיאה הנוכחית - השגיאה האחרונה
-            derivative = error - lastError  
-            
-            # הגדרת זווית הפנייה הדרושה בנסיעה
-            # הכפלת כל חלק במשקל התיקון שלו
-            correction = (Kp * (error) + Ki * (integral) + Kd * derivative) * -1
-
-            # נסיעה לפי המהירות וזווית הנסיעה של התיקון
-            self.robot.drive(drive_speed * speed_indicator , correction * direction_indicator * -1)
-
-            # הפעלת הקיר (במקרה שהזמן להמתנה להפעלת הקיר עבר)
-            if sw_for_wall_timing.time() > seconds_to_start_wall * 1000: 
-                self.wall_x_motor.run_target(wall_speed, x, Stop.BRAKE, wait = False)     
-                self.wall_y_motor.run_target(wall_speed, y, Stop.BRAKE, wait = False)
-            
-            # הגדרת השגיאה האחרונה כשגיאה הנוכחית
-            lastError = error  
-        
-        # עצירת הרובוט והקיר          
-        self.robot.stop()
-        self.wall_x_motor.stop()
-        self.wall_y_motor.stop()
-
-        self.push_wall_values()
-
-        # במקרה והנסיעה הסתיימה לפני שהזזת הקיר הושלמה, הזז את הקיר לנקודה הרצוייה
-        if self.wall_x_motor.angle() != x or self.wall_y_motor.angle() != y:                
-            self.move_wall_to_point(x, y)
-
-        # הדפסת נתוני הנסיעה וערכי הקיר הנוכחיים
-        print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
-        print("wall_x: " + str(self.wall_x_motor.angle()) + " wall_y: " + str(self.wall_y_motor.angle()))
-        
 
 
         
@@ -576,10 +367,6 @@ class Robot:
         פונקציה ללמידת ערכי הפיד האופטימליים למעקב אחרי קו     
         """
 
-        # איפוס הקיר והזזתו למרכז - למעלה (על מנת שלא ישפיע על הנסיעה)
-        self.reset_wall()
-        self.move_wall_to_point(self.WALL_MAX_ANGLE_X / 2, self.WALL_MAX_ANGLE_Y)
-
         # שימוש בפונקציית יצירת הקובץ
         self.create_log_file()
 
@@ -764,8 +551,8 @@ class Robot:
                 self.left_motor.run(speed = speed)
 
             # עצירת מנועי הרובוט
-            self.right_motor.brake()
-            self.left_motor.brake()
+            # self.right_motor.brake()
+            # self.left_motor.brake()
 
 
             #נוסע את שארית ערך הזווית במהירות מופחתת פי 0.2
@@ -776,8 +563,12 @@ class Robot:
                 print("degree: " + str(self.gyro_sensor.angle()))
 
                 # פנייה במהירות כמעט מלאה
-                self.right_motor.run(speed = (-0.2 * speed))
-                self.left_motor.run(speed = speed * 0.2)
+                speed *= 0.8
+                if speed < 20:
+                    speed = 20
+                    
+                self.right_motor.run(speed = (-1 * speed))
+                self.left_motor.run(speed = speed)
 
             # עצירת מנועי הרובוט
             self.right_motor.brake()
@@ -1064,3 +855,10 @@ class Robot:
     
     
 ##### The End :) #####
+if __name__ == '__main__':
+    robot = Robot()
+    debug = True
+    robot.pid_gyro(40)
+    print(GyroSensor.angle())
+    robot.wait_for_button("Press to turn 90 right", debug)
+    robot.turn(90, 50)

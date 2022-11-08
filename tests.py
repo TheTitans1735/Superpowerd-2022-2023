@@ -2,12 +2,16 @@
 from robot import *
 
 ilan = Robot()
-ilan.reset_wall_bottom_right()
-ilan.say("takme`")
-
-
 
 ##### Center Run #####
+
+def test_run():
+
+    #ilan.run_straight(30)
+    #ilan.run_straight(-30)
+    ilan.turn(90)
+    ilan.turn(-90)
+    ilan.say("succes")
 
 def center_run():
     """ Crane | Containers on Deck | Small Truck | Parking """
@@ -68,7 +72,7 @@ def right_run():
     ilan.turn(90,180)
 
 def up_run():
-    pass
+    ilan.run_straight(10)
 
 def down_run():
     ilan.say("start")
@@ -111,7 +115,7 @@ def running ():
             if Button.LEFT in ilan.ev3.buttons.pressed():
                 
                 ilan.write("Left Run")
-                left_run() # הפעלת הריצה
+                test_run() # הפעלת הריצה
 
 
             # כפתור ימני - ראן צפון מערב
@@ -132,7 +136,7 @@ def running ():
             elif Button.UP in ilan.ev3.buttons.pressed():
 
                 ilan.write("UP run")
-                up_run(False) # הפעלת הראן (מכולות רחוקות)
+                up_run() # הפעלת הראן (מכולות רחוקות)
 
 
             elif Button.CENTER in ilan.ev3.buttons.pressed():
@@ -145,6 +149,7 @@ def running ():
             print("Error: {}".format(ex))
             wait(2500)
 
+#ilan.say("auri serbero. aoyb ir farshteyn mir, ir zent a nul vos rizembalz milkh in a liter kartan.", 'de')
 running()
 
 # north_west_run()
