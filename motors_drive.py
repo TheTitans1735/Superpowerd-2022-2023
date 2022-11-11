@@ -26,18 +26,18 @@ while True:
     while True:
         
         if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "drive":
-            ilan.wait_for_button("if drive: turn right \n if motors: motors right", if_wait)
+           # ilan.wait_for_button("if drive: turn right \n if motors: motors right", if_wait)
             """Move wall to right"""
-            
-            ilan.left_motor.dc(100)
-            ilan.right_motor.dc(-100)
+            print(situation)
+            ilan.left_motor.run(50)
+            ilan.right_motor.run(-50)
         elif Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "motor":
             ilan.left_medium_motor.dc(50)
             ilan.right_medium_motor.dc(50)
 
         elif Button.LEFT in ilan.ev3.buttons.pressed()  and situation == "drive":
-            ilan.left_motor.dc(-100)
-            ilan.right_motor.dc(100)
+            ilan.left_motor.run(-50)
+            ilan.right_motor.run(50)
 
         elif Button.LEFT in ilan.ev3.buttons.pressed()  and situation == "motor":
             ilan.left_medium_motor.dc(-50)

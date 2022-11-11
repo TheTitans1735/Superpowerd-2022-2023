@@ -219,9 +219,8 @@ class Robot:
         
         # עצור את הרובוט
         self.robot.stop()
-
-
-
+        wait(2000)
+        print(self.gyro_sensor.angle())
     ##### RUN STRAIGHT ####
 
     def run_straight (self, distance):
@@ -817,48 +816,17 @@ class Robot:
         
 
 
-    def  align_on_line(self, speed:100):
-        if Color.upper() == "WHITE":
-            left_steering_motor_exit_exec = lambda: self.ColorSensors.left_sensor.reflection() > Color.WHITE
-            right_steering_motor_exit_exec = lambda: self.ColorSensors.right_sensor.reflection() > Color.WHITE
-        elif Color.upper() == "BLACK":
-            left_steering_motor_exit_exec = lambda: self.ColorSensors.left_sensor.reflection() < Color.BLACK
-            right_steering_motor_exit_exec = lambda: self.ColorSensors.right_sensor.reflection() < Color.BLACK
-        else:
-            raise Exception("Invalid color for Robot.square_line()")
-            
-        for repetition in range(2):
-            self.Motors.left_steering_motor.run(speed)
-            self.Motors.right_steering_motor.run(speed)
-            left_ok = False
-            right_ok = False
-            while self.active:
-                # Keep moving the left motor until it reaches the line
-                if left_steering_motor_exit_exec():
-                    left_ok = True
-                    self.Motors.left_steering_motor.hold()
+    def stop_on_line(self, color):
+        while ColorSensor.reflection() != color:
+            wait(1)            
+        self.robot.stop()
 
-                # Keep moving the right motor until it reaches the line
-                if right_steering_motor_exit_exec():
-                    right_ok = True
-                    self.Motors.right_steering_motor.hold()
-
-                # If both sensors are on the line, go backwards and repeat the process one more time
-                if left_ok and right_ok:
-                    if repetition == 0:
-                        self.drive(-5 if speed > 0 else 5, speed_kp=1.2)
-                    break
-
-
-        self.Motors.left_steering_motor.hold()
-        self.Motors.right_steering_motor.hold()
-    
-    
 ##### The End :) #####
 if __name__ == '__main__':
     robot = Robot()
     debug = True
-    robot.pid_gyro(40)
-    print(GyroSensor.angle())
-    robot.wait_for_button("Press to turn 90 right", debug)
-    robot.turn(90, 50)
+    #robot.pid_gyro(40)
+    #print(GyroSensor.angle())
+    # robot.wait_for_button("Press to turn 90 right", debug)
+    # robot.turn(90, 50)
+    robot.pid_gyro_until_color(Ts = 100)

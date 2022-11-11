@@ -7,11 +7,7 @@ ilan = Robot()
 
 def test_run():
 
-    #ilan.run_straight(30)
-    #ilan.run_straight(-30)
-    ilan.turn(90)
-    ilan.turn(-90)
-    ilan.say("succes")
+    ilan.straighten_on_black()
 
 def center_run():
     """ Crane | Containers on Deck | Small Truck | Parking """
@@ -66,7 +62,7 @@ def fast_to_slow_stop(ts1,td1,ts2,td2):
 
 def left_run():
     ilan.say(" ish mi billy otten dotten")
-    ilan.straighten_on_black()
+
 def right_run():
     ilan.run_straight(200)
     ilan.turn(90,180)
@@ -150,7 +146,7 @@ def running ():
             wait(2500)
 
 #ilan.say("auri serbero. aoyb ir farshteyn mir, ir zent a nul vos rizembalz milkh in a liter kartan.", 'de')
-running()
+pid_gyro_until_color()
 
 # north_west_run()
 # south_run_2022_03_09()
