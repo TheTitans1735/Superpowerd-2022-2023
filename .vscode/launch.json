@@ -5,6 +5,13 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Python: Module",
+			"type": "python",
+			"request": "launch",
+			"module": "pygame",
+			"justMyCode": true
+		},
+		{
 			"name": "Tests Download and Run",
 			"type": "ev3devBrowser",
 			"request": "launch",
@@ -12,27 +19,32 @@
 			"interactiveTerminal": false
 		},
 		{
-
 			"name": "Main Download and Run",
 			"type": "ev3devBrowser",
 			"request": "launch",
 			"program": "/home/robot/${workspaceRootFolderName}/robot.py",
 			"interactiveTerminal": false
-		}, 
+		},
 		{
 			"name": "ilan-brother",
 			"type": "ev3devBrowser",
 			"request": "launch",
 			"program": "/home/robot/${workspaceRootFolderName}/ilan-brother.py",
 			"interactiveTerminal": false
-		}, 
+		},
 		{
 			"name": "motors_drive",
 			"type": "ev3devBrowser",
 			"request": "launch",
 			"program": "/home/robot/${workspaceRootFolderName}/motors_drive.py",
-			"interactiveTerminal": false, 
-
+			"interactiveTerminal": false,
+		},
+		{
+			"name": "wireless control Download and Run",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/wireless control.py",
+			"interactiveTerminal": false
 		}
 	]
 }

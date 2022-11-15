@@ -82,7 +82,7 @@ class Robot:
 
     ##### PID Gyro #####
 
-    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
+    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True):
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
         """
@@ -111,7 +111,7 @@ class Robot:
         lastError = 0 
 
         ## Start Loop ##
-        while (abs(self.robot.distance()) < Td * 10):
+        while (abs(self.robot.distance()) < Td * 10) and alternative_cond():
             wait(20) #ע"מ לא לגזול את כל המשאבים
             self.check_forced_exit()
 
@@ -157,6 +157,10 @@ class Robot:
     ##### PID GYRO UNTIL COLOR #####
 
     def pid_gyro_until_color(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
+        stop_if_both_black = lambda: self.color_sensor_right.color() != stop_color or self.color_sensor_left.color() != stop_color
+        self.pid_gyro(100, alternative_cond=stop_if_both_black)
+
+    def pid_gyro_until_color1(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
         """
         PID Gyro נסיעה ישרה עד זיהוי קו באמצעות
         """
@@ -829,4 +833,3 @@ if __name__ == '__main__':
     #print(GyroSensor.angle())
     # robot.wait_for_button("Press to turn 90 right", debug)
     # robot.turn(90, 50)
-    robot.pid_gyro_until_color(Ts = 100)

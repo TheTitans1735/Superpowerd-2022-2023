@@ -1,6 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 
 from pybricks.tools import wait
+
 from robot import *
 
 '''
@@ -44,7 +45,7 @@ while True:
             ilan.right_medium_motor.dc(-50)
             
 
-        elif Button.UP in ilan.ev3.buttons.pressed():
+        elif Button.UP in ilan.ev3.buttons.pressed() and situation == "drive":
             ilan.left_motor.run(speed)
             ilan.right_motor.run(speed)
 
