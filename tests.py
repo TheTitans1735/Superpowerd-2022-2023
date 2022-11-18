@@ -6,7 +6,8 @@ ilan = Robot()
 ##### Center Run #####
 
 def test_run():
-
+    
+    
     ilan.pid_gyro_until_color()
 
 def center_run():
@@ -62,13 +63,18 @@ def fast_to_slow_stop(ts1,td1,ts2,td2):
 
 def left_run():
     ilan.say(" ish mi billy otten dotten")
+    ilan.learn_pid_line_values_2022_03_11()
 
 def right_run():
     ilan.run_straight(200)
     ilan.turn(90,180)
 
 def up_run():
-    ilan.run_straight(10)
+    ilan.pid_gyro(25)
+    ilan.beep()
+    print("pass")
+    ilan.pid_gyro(25,Forward_Is_True=False)
+    ilan.beep()
 
 def down_run():
     ilan.say("start")
@@ -150,10 +156,56 @@ def running ():
 # north_west_run()
 # south_run_2022_03_09()
 
+ilan.left_medium_motor.run
 # # הזזה מהירה של הגלגלים 
 # ilan.write("Start moving wheels")
 # ilan.beep()
 # while True:
 #         ilan.right_motor.run(500)
 #         ilan.left_motor.run(500)
-running()
+# while True:
+#     while not any(ilan.ev3.buttons.pressed()):
+#         wait(10)
+
+#     # Respond to the Brick Button press.
+#     while True:
+        
+#         angle = str(ilan.gyro_sensor.angle())
+#         if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "drive":
+#             ilan.left_motor.run(150)
+#             ilan.right_motor.run(-150)
+#             ilan.wait_for_button(angle,debug = False)
+#         elif Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "motor":
+#         #     ilan.left_medium_motor.run(500)
+#         #     ilan.right_medium_motor.run(500)
+
+
+#         elif Button.LEFT in ilan.ev3.buttons.pressed()  and situation == "drive":
+#         #     ilan.left_motor.run(-150)
+#         #     ilan.right_motor.run(150)
+#         #     ilan.wait_for_button(angle, debug = False)
+#         elif Button.LEFT in ilan.ev3.buttons.pressed()  and situation == "motor":
+#         #     ilan.left_medium_motor.run(-500)
+#         #     ilan.right_medium_motor.run(-500) 
+
+#         elif Button.UP in ilan.ev3.buttons.pressed() and situation == "drive":
+#         #     ilan.left_motor.run(speed)
+#         #     ilan.right_motor.run(speed)
+
+#         elif Button.DOWN in ilan.ev3.buttons.pressed():
+            
+#         #     ilan.left_motor.run(-1 * speed)
+#         #     ilan.right_motor.run(-1 * speed)
+
+#         elif Button.CENTER in ilan.ev3.buttons.pressed():  
+#         #     if situation == "drive":
+#         #         ilan.write("motor")
+#         #         situation = "motor"
+#         #     else:
+#         #         ilan.write("drive")
+#         #         situation = "drive"
+#         # else:
+#         #     ilan.left_motor.hold()
+#         #     ilan.right_motor.hold()
+#         #     ilan.left_medium_motor.hold()
+#         #     ilan.right_medium_motor.hold()

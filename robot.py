@@ -1,7 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 
 import csv
-import time
+
 
 from pybricks.ev3devices import ColorSensor, GyroSensor, Motor
 from pybricks.hubs import EV3Brick
@@ -10,7 +10,7 @@ from pybricks.parameters import Button, Color, Direction, Port, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import DataLog, StopWatch, wait
 
-#import datetime
+import datetime
 """
 All Robot actions
 """
@@ -59,7 +59,7 @@ class Robot:
         עדכון ערך הפוזיציה הנוכחית של הקיר לפי מה שנכתב בקובץ הטקסט
         """
 
-        # with open('wall_values.txt') as f:
+        # with open('wall_values.txt'x  ) as f:
         #     content = f.readline()
 
         #     x_value, y_value = content.split(",")
@@ -82,6 +82,10 @@ class Robot:
 
     ##### PID Gyro #####
 
+
+    def drive_run_time(speed=150, time):
+        datetime.time.  
+        
     def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True):
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
@@ -114,6 +118,7 @@ class Robot:
         while (abs(self.robot.distance()) < Td * 10) and alternative_cond():
             wait(20) #ע"מ לא לגזול את כל המשאבים
             self.check_forced_exit()
+            self.gyro_sensor.reset_angle(0)
 
             # P - Proportional
             # תיקון השגיאה המיידית
@@ -147,10 +152,11 @@ class Robot:
             lastError = error  
         
         # עצור את הרובוט
-        
+        print("hi")
+        self.robot.stop()
         self.left_motor.hold()
         self.right_motor.hold()
-        self.robot.stop()
+        
 
 
         
