@@ -10,7 +10,7 @@ from pybricks.parameters import Button, Color, Direction, Port, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import DataLog, StopWatch, wait
 
-import datetime
+# import datetime
 """
 All Robot actions
 """
@@ -83,10 +83,9 @@ class Robot:
     ##### PID Gyro #####
 
 
-    def drive_run_time(speed=150, time):
-        datetime.time.  
-        
-    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True):
+    # def drive_run_time(speed=150, time):
+    #     datetime.time. 
+    def speed_formula(self, Td, Vmax = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True): 
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
         """
@@ -100,7 +99,7 @@ class Robot:
 
         # reset
         self.robot.reset() 
-        self.gyro_sensor.reset_angle(0)
+        self.gyro_sensor.reset_angle(0)    
 
         # Td = 1000 # target distance
         # Ts = 150 # target speed of robot in mm/s
@@ -115,11 +114,13 @@ class Robot:
         lastError = 0 
 
         ## Start Loop ##
-        while (abs(self.robot.distance()) < Td * 10) and alternative_cond():
-            wait(20) #ע"מ לא לגזול את כל המשאבים
+        while (abs(self.robot.distance()) <Td * 10) and alternative_cond():
+            wait(1) #ע"מ לא לגזול את כל המשאבים
+            XdivD = abs(self.robot.distance()) / (Td * 10.0)
+            Ts = 4 * Vmax * (XdivD - (XdivD ** 2))
+            if Ts < 20:
+                Ts = 20
             self.check_forced_exit()
-            self.gyro_sensor.reset_angle(0)
-
             # P - Proportional
             # תיקון השגיאה המיידית
             # הגדר את השגיאה כזווית הנוכחית של הג'יירו
@@ -150,13 +151,90 @@ class Robot:
 
             # הגדר את השגיאה האחרונה כשגיאה הנוכחית
             lastError = error  
+            
         
         # עצור את הרובוט
-        print("hi")
         self.robot.stop()
         self.left_motor.hold()
         self.right_motor.hold()
+        print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
+
         
+    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True):
+        """
+        PID Gyro נסיעה ישרה באמצעות מנגנון
+        """
+
+        direction_indicator = -1
+        speed_indicator = -1       #משתנה שנועד כדי לכפול אותו במהירות ובתיקון השגיאה כדי שנוכל לנסוע אחורה במידת הצורך     
+
+        if Forward_Is_True:             #אם נוסעים קדימה - תכפול באחד. אחורה - תכפול במינוס אחד
+            direction_indicator = -1
+            speed_indicator = 1   
+
+        # reset
+        self.robot.reset() 
+        self.gyro_sensor.reset_angle(0)    
+
+        # Td = 1000 # target distance
+        # Ts = 150 # target speed of robot in mm/s
+
+        # Kp = 3.06 #  the Constant 'K' for the 'p' proportional controller
+        # Ki = 0.027 #  the Constant 'K' for the 'i' integral term
+        # Kd = 3.02 #  the Constant 'K' for the 'd' derivative term
+
+        # initialize
+        integral = 0 
+        derivative = 0 
+        lastError = 0 
+
+        ## Start Loop ##
+        while (abs(self.robot.distance()) <Td * 10) and alternative_cond():
+            wait(20) #ע"מ לא לגזול את כל המשאבים
+            self.check_forced_exit()
+            # P - Proportional
+            # תיקון השגיאה המיידית
+            # הגדר את השגיאה כזווית הנוכחית של הג'יירו
+            error = self.gyro_sensor.angle() 
+
+            print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
+
+            # I - Integral
+            # תיקון השגיאה המצטברת
+            # אם ישנה שגיאה, הוסף אותה לאינטגרל
+            if (error == 0):
+                integral = 0
+
+            else:
+                integral = integral + error    
+
+            # D - Derivative
+            # תיקון השגיאה העתידית
+            # הגדר את הדריבטיב כשגיאה הנוכחית - השגיאה האחרונה
+            derivative = error - lastError  
+            
+            # הגדרת זווית הפנייה הדרושה בנסיעה
+            # הכפלת כל חלק במשקל התיקון שלו
+            correction = (Kp * (error) + Ki * (integral) + Kd * derivative) * -1
+
+            # נסיעה לפי המהירות וזווית הנסיעה של התיקון
+            self.robot.drive(Ts * speed_indicator , correction * direction_indicator * -1)
+
+            # הגדר את השגיאה האחרונה כשגיאה הנוכחית
+            lastError = error  
+            
+        
+        # עצור את הרובוט
+        print("hi")
+        if Forward_Is_True == True:
+            self.robot.stop()
+            self.left_motor.hold()
+            self.right_motor.hold()
+        else:
+            self.robot.stop()
+            self.left_motor.brake()
+            self.right_motor.brake()
+        print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
 
 
         
@@ -344,7 +422,7 @@ class Robot:
         יצירת קובץ למדידת ערכי פיד אופטימליים
         """
         
-        log_file_name = time.strftime("%Y_%m_%d_%H_%M_%S")
+        # log_file_name = time.strftime("%Y_%m_%d_%H_%M_%S")
 
         # print file's name
         print(log_file_name)

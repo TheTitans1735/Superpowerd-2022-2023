@@ -27,7 +27,7 @@ while True:
         
         angle = str(ilan.gyro_sensor.angle())
         if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "drive":
-            while not Button.RIGHT in ilan.ev3.buttons.pressed():
+            while Button.RIGHT in ilan.ev3.buttons.pressed():
                 ilan.left_motor.run(150)
                 ilan.right_motor.run(-150)
                 ilan.wait_for_button(angle,debug = False)
@@ -36,7 +36,7 @@ while True:
             ilan.right_medium_motor.run(500)
 
         elif Button.LEFT in ilan.ev3.buttons.pressed()  and situation == "drive":
-            while not Button.LEFT in ilan.ev3.buttons.pressed():
+            while Button.LEFT in ilan.ev3.buttons.pressed():
                 ilan.left_motor.run(-150)
                 ilan.right_motor.run(150)
                 ilan.wait_for_button(angle, debug = False)
@@ -44,7 +44,7 @@ while True:
             ilan.left_medium_motor.run(-500)
             ilan.right_medium_motor.run(-500) 
 
-        elif Button.UP in ilan.ev3.buttons.pressed() and situation == "drive":
+        elif Button.UP in ilan.ev3.buttons.pressed():
             ilan.left_motor.run(speed)
             ilan.right_motor.run(speed)
 

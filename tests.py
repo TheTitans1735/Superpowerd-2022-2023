@@ -66,9 +66,8 @@ def left_run():
     ilan.learn_pid_line_values_2022_03_11()
 
 def right_run():
-    ilan.run_straight(200)
-    ilan.turn(90,180)
-
+    wait(2000)
+    ilan.speed_formula(85)
 def up_run():
     ilan.pid_gyro(25)
     ilan.beep()
@@ -152,11 +151,11 @@ def running ():
             wait(2500)
 
 #ilan.say("auri serbero. aoyb ir farshteyn mir, ir zent a nul vos rizembalz milkh in a liter kartan.", 'de')
-
+running()
 # north_west_run()
 # south_run_2022_03_09()
 
-ilan.left_medium_motor.run
+# ilan.left_medium_motor.run
 # # הזזה מהירה של הגלגלים 
 # ilan.write("Start moving wheels")
 # ilan.beep()
