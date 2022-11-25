@@ -7,8 +7,9 @@ ilan = Robot()
 
 def test_run():
     
+    ilan.pid_gyro(30,150)
+    ilan.pid_gyro(30,150,False)
     
-    ilan.pid_gyro_until_color()
 
 def center_run():
     """ Crane | Containers on Deck | Small Truck | Parking """
@@ -151,7 +152,14 @@ def running ():
             wait(2500)
 
 #ilan.say("auri serbero. aoyb ir farshteyn mir, ir zent a nul vos rizembalz milkh in a liter kartan.", 'de')
-running()
+
+test_run()
+###############
+#running()    #
+              # 
+###############
+
+
 # north_west_run()
 # south_run_2022_03_09()
 

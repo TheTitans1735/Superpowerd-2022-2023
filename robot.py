@@ -30,7 +30,7 @@ class Robot:
 
         # robot
         self.robot = DriveBase(self.left_motor, self.right_motor, wheel_diameter=62.4, axle_track=75)
-        self.robot.settings(straight_speed=200, straight_acceleration=100, turn_rate=100)
+        self.robot.settings(straight_speed=80, straight_acceleration=40, turn_rate=100)
 
         # color sensors
         self.color_sensor_left = ColorSensor(Port.S1)
@@ -85,7 +85,7 @@ class Robot:
 
     # def drive_run_time(speed=150, time):
     #     datetime.time. 
-    def speed_formula(self, Td, Vmax = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True): 
+    def speed_formula(self, Td, Vmax = 150, Forward_Is_True = True, Kp = 3.09, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True): 
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
         """
@@ -159,8 +159,19 @@ class Robot:
         self.right_motor.hold()
         print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
 
+
+    def rst_to_angle_zero(self):
+        """מטרת פונקציה זו היא שהרובוט יתקן את עצמו בעזרת סיבוב לזווית 0"""
+        while(self.gyro_sensor.angle() < 0):
+            self.left_motor.run(30)
+            self.right_motor.run(-30)
+        while(self.gyro_sensor.angle() > 0):
+            self.left_motor.run(-30)
+            self.right_motor.run(30)
+        self.robot.stop()
+
         
-    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True):
+    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.1, Ki= 0.025, Kd =3.3, alternative_cond = lambda : True):
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
         """
@@ -226,14 +237,36 @@ class Robot:
         
         # עצור את הרובוט
         print("hi")
-        if Forward_Is_True == True:
-            self.robot.stop()
-            self.left_motor.hold()
-            self.right_motor.hold()
-        else:
-            self.robot.stop()
-            self.left_motor.brake()
-            self.right_motor.brake()
+        # if Forward_Is_True:
+        #     self.left_motor.stop()
+        #     self.right_motor.stop()
+        #     self.robot.stop()
+            
+        # else:
+        #     self.left_motor.hold()
+        #     self.right_motor.hold()
+        #     self.robot.stop()
+            
+        self.robot.stop()
+        
+        self.left_motor.brake()
+        self.right_motor.brake()
+
+        print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
+        
+        wait(200) # כדי שאילן יגיע לעצירה מוחלטת לגמרי
+        
+        if Forward_Is_True:
+            self.robot.straight(Td*10-self.robot.distance())
+        else:                                                       ### תיקון הסטיה במרחק (אם אילן נסע פחות/יותר ממה שאמור)
+            self.robot.settings(-80,40) 
+            self.robot.straight((Td*10+self.robot.distance()))
+        
+        self.robot.stop()
+        print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
+        self.rst_to_angle_zero() #תתקן את עצמך בסיבוב עד שאתה מגיע ל0 מעלות
+        wait(200)
+        self.robot.settings(80,40) 
         print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
 
 
