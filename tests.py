@@ -6,9 +6,9 @@ ilan = Robot()
 ##### Center Run #####
 
 def test_run():
-    
-    ilan.pid_gyro(30,150)
-    ilan.pid_gyro(30,150,False)
+    # ilan.rst_to_angle_zero()
+    wait(3000)
+    ilan.speed_formula(85)
     
 
 def center_run():
@@ -63,8 +63,11 @@ def fast_to_slow_stop(ts1,td1,ts2,td2):
     ts =300
 
 def left_run():
-    ilan.say(" ish mi billy otten dotten")
-    ilan.learn_pid_line_values_2022_03_11()
+    # ilan.say(" ish mi billy otten dotten")
+    # ilan.learn_pid_line_values_2022_03_11()
+    wait(2000)
+    # ilan.speed_formula(85, Forward_Is_True=False)
+    ilan.straighten_on_black()
 
 def right_run():
     wait(2000)
@@ -117,7 +120,7 @@ def running ():
             if Button.LEFT in ilan.ev3.buttons.pressed():
                 
                 ilan.write("Left Run")
-                test_run() # הפעלת הריצה
+                left_run() # הפעלת הריצה
 
 
             # כפתור ימני - ראן צפון מערב
@@ -153,7 +156,7 @@ def running ():
 
 #ilan.say("auri serbero. aoyb ir farshteyn mir, ir zent a nul vos rizembalz milkh in a liter kartan.", 'de')
 
-test_run()
+running()
 ###############
 #running()    #
               # 

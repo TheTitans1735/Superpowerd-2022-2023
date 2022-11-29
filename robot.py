@@ -85,7 +85,7 @@ class Robot:
 
     # def drive_run_time(speed=150, time):
     #     datetime.time. 
-    def speed_formula(self, Td, Vmax = 150, Forward_Is_True = True, Kp = 3.09, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True): 
+    def speed_formula(self, Td, Vmax = 300, Forward_Is_True = True, Kp = 3.09, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True): 
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
         """
@@ -168,6 +168,39 @@ class Robot:
         while(self.gyro_sensor.angle() > 0):
             self.left_motor.run(-30)
             self.right_motor.run(30)
+        self.robot.stop()
+
+        
+    def align_on_black_white(self,right_first):
+        """מטרת פונקציה זו היא שהרובוט יתקן את עצמו בעצירה על קו"""
+        if right_first == True:
+            while(self.color_sensor_right.color() == Color.BLACK):
+                self.right_motor.run(-20)
+                self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
+                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+            self.right_motor.hold()
+
+
+            while(self.color_sensor_left.color() == Color.BLACK):
+                self.left_motor.run(-20)
+                self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
+                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+            self.left_motor.hold()
+
+        else:
+            while(self.color_sensor_left.color() == Color.BLACK):
+                self.left_motor.run(-20)
+                self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
+                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+            self.left_motor.hold()
+
+
+            while(self.color_sensor_right.color() == Color.BLACK):
+                self.right_motor.run(-20)
+                self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
+                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+            self.right_motor.hold()
+
         self.robot.stop()
 
         
@@ -583,7 +616,7 @@ class Robot:
         right_sensor_flag = False
         left_sensor_flag = False
         target_reflection = -1
-
+        right_first = False
         ## התיישרות על הקו ##
         ## כל עוד שני החיישנים עוד לא זיהו שחור ##
         while (right_sensor_flag == False or left_sensor_flag == False):
@@ -598,7 +631,8 @@ class Robot:
 
                     # הגדרת האור המוחזר הרצוי כאור שהחיישן הימני קולט
                     target_reflection = self.color_sensor_right.reflection()
-                    self.right_motor.brake()
+                    self.right_motor.hold()
+                    right_first = True
 
                 # אם החיישן השמאלי מזהה שחור
                 elif self.color_sensor_left.color() == Color.BLACK:
@@ -606,32 +640,34 @@ class Robot:
 
                     # הגדרת האור המוחזר הרצוי כאור שהחיישן השמאלי קולט
                     target_reflection = self.color_sensor_left.reflection()
-                    self.left_motor.brake()
+                    self.left_motor.hold()
 
                 # הדפסת הצבע שהחיישנים קולטים
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
+                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
 
             # אם אחד מהחיישנים זיהה צבע שחור
             else:
 
                 # אם החיישן הימני זיהה שחור
-                if self.color_sensor_right.reflection() == target_reflection:
+                if self.color_sensor_right.reflection() <= target_reflection:
                     right_sensor_flag = True
 
                     # עצור את המנוע הימני
-                    self.right_motor.brake()
+                    self.right_motor.hold()
 
                 # אם החיישן השמאלי זיהה שחור
                 if self.color_sensor_left.reflection() <= target_reflection:
                     left_sensor_flag = True
 
                     # עצור את המנוע השמאלי
-                    self.left_motor.brake()
+                    self.left_motor.hold()
 
                 # הדפסת האור שמוחזר בשני החיישנים
                 self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
 
             wait(10)
+        self.align_on_black_white(right_first)
         
         # הדפסת האור והצבע ששני החיישנים קוראים
         self.write("C Left: " + str(self.color_sensor_left.color()))
@@ -950,3 +986,4 @@ if __name__ == '__main__':
     #print(GyroSensor.angle())
     # robot.wait_for_button("Press to turn 90 right", debug)
     # robot.turn(90, 50)
+    

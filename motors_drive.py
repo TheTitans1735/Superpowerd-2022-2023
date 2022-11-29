@@ -7,7 +7,7 @@ from robot import *
 '''
 Move the wall accordingly to the buttons
 '''
-
+            
 ilan = Robot()
 
 default_speed = 150
@@ -24,6 +24,7 @@ while True:
 
     # Respond to the Brick Button press.
     while True:
+        
         
         angle = str(ilan.gyro_sensor.angle())
         if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "drive":
@@ -45,6 +46,7 @@ while True:
             ilan.right_medium_motor.run(-500) 
 
         elif Button.UP in ilan.ev3.buttons.pressed():
+            
             ilan.left_motor.run(speed)
             ilan.right_motor.run(speed)
 
@@ -54,6 +56,9 @@ while True:
             ilan.right_motor.run(-1 * speed)
 
         elif Button.CENTER in ilan.ev3.buttons.pressed():  
+
+
+
             if situation == "drive":
                 ilan.write("motor")
                 situation = "motor"
