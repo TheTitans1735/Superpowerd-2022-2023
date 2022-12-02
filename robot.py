@@ -112,11 +112,12 @@ class Robot:
         integral = 0 
         derivative = 0 
         lastError = 0 
-
+        
         ## Start Loop ##
         while (abs(self.robot.distance()) <Td * 10) and alternative_cond():
+            X = self.robot.distance()
             wait(1) #ע"מ לא לגזול את כל המשאבים
-            XdivD = abs(self.robot.distance()) / (Td * 10.0)
+            XdivD = abs(X) / (Td * 10.0)
             Ts = 4 * Vmax * (XdivD - (XdivD ** 2))
             if Ts < 20:
                 Ts = 20
@@ -386,7 +387,7 @@ class Robot:
 
     ##### PID Follow Line #####
 
-    def pid_follow_line(self, distance, speed, line_sensor, stop_condition = lambda: False, Kp = 1.30 ,Ki = 0.01, white_is_right = True, Kd=0.07):
+    def pid_follow_line(self, distance, speed, line_sensor, stop_condition = lambda: False, Kp = 0.55 ,Ki = 0.01, white_is_right = True, Kd=0.07):
         """
         PID מעקב אחרי קו עם מנגנון 
         """
@@ -472,7 +473,7 @@ class Robot:
                 break
 
             # You can wait for a short time or do other things in this loop.
-            wait(10)
+            wait(1)
             
         # stop robot movement
         self.robot.stop()
@@ -571,7 +572,7 @@ class Robot:
     ##### PID FOLLOW RIGHT LINE UNTIL LEFT DETECT COLOR #####
 
     def pid_follow_line_until_other_detect_color (self, lines_till_stop, follow_color_sensor, detection_color_sensor,
-                                                    speed = 90, white_is_right = True, stop_color = Color.BLACK, kp = 1.3, ki = 0.01, kd = 0.07):
+                                                    speed = 90, white_is_right = True, stop_color = Color.BLACK, kp = 0.55, ki = 0.01, kd = 0.07):
         """
         סע על הקו השחור עד זיהוי כמות מסויימת של קווים שחורים עם חיישן הצבע השני
         """

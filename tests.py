@@ -61,6 +61,16 @@ def center_run():
 
 def fast_to_slow_stop(ts1,td1,ts2,td2):
     ts =300
+def run_2():
+    ilan.speed_formula(40.5,400)
+    ilan.speed_formula(50.5,600,False)
+    ilan.turn(-48)
+    ilan.speed_formula(45,500)
+    ilan.pid_gyro(5,200)
+    ilan.speed_formula(45,600,False)
+    
+def run_1():
+    pass
 
 def left_run():
     # ilan.say(" ish mi billy otten dotten")
@@ -73,11 +83,13 @@ def right_run():
     wait(2000)
     ilan.speed_formula(85)
 def up_run():
-    ilan.pid_gyro(25)
-    ilan.beep()
-    print("pass")
-    ilan.pid_gyro(25,Forward_Is_True=False)
-    ilan.beep()
+    ilan.pid_follow_line_until_other_detect_color(2,ilan.color_sensor_left,ilan.color_sensor_right,100)
+    ilan.turn(90)
+    ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,100)
+    ilan.turn(90)
+    ilan.speed_formula(40)
+    ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,100)
+
 
 def down_run():
     ilan.say("start")
@@ -141,7 +153,7 @@ def running ():
             elif Button.UP in ilan.ev3.buttons.pressed():
 
                 ilan.write("UP run")
-                up_run() # הפעלת הראן (מכולות רחוקות)
+                run_2() # הפעלת הראן (מכולות רחוקות)
 
 
             elif Button.CENTER in ilan.ev3.buttons.pressed():
