@@ -19,6 +19,13 @@
 			"interactiveTerminal": false
 		},
 		{
+			"name": "Runs",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/runs.py",
+			"interactiveTerminal": false
+		},
+		{
 			"name": "Main Download and Run",
 			"type": "ev3devBrowser",
 			"request": "launch",

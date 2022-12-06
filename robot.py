@@ -51,7 +51,20 @@ class Robot:
 
 
 
-   
+    def drive_by_seconds(self, speed, time_seconds):
+        import time
+        self.gyro_sensor.reset_angle(0)
+        direction_indicator=1
+        if (speed < 0):
+            direction_indicator = -1 #אם נוסעים אחורה תתקן גיירו לצד השני 
+        start = time.time()
+        while ((time.time() - start) < time_seconds):
+            print("gyro: " + str(self.gyro_sensor.angle()))
+            self.robot.drive(speed, self.gyro_sensor.angle() * direction_indicator)
+        self.robot.stop()
+
+
+
     ##### UPDATE WALL'S CURRENT VALUES #####
 
     def update_angles_from_file(self):
