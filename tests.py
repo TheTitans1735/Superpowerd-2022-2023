@@ -59,47 +59,23 @@ def center_run():
     # (: זה הג'וק שהקפיץ את השפריץ של המיץ לעציץ על השפיץ של הקפיץ בחריץ המסוכן האור ההר
     # ilan.say("ze hajuk shehekpitz et hashpritz shel hamitlahatzitz al hashpitz shel hakfitz baharitz hamesukan behor hahar")
 
-def fast_to_slow_stop(ts1,td1,ts2,td2):
-    ts =300
-def run_2():
-    ilan.speed_formula(40.5,400)
-    ilan.speed_formula(50.5,600,False)
-    ilan.turn(-48)
-    ilan.speed_formula(45,500)
-    ilan.pid_gyro(5,200)
-    ilan.speed_formula(45,600,False)
-    
-def run_1():
-    pass
+def test_4(ts1,td1,ts2,td2):
+   ilan.right_medium_motor.run_until_stalled(-300)
+def test_3():
+    ilan.right_medium_motor.run_until_stalled(300)
 
-def left_run():
-    # ilan.say(" ish mi billy otten dotten")
-    # ilan.learn_pid_line_values_2022_03_11()
+def test():
+    ilan.right_medium_motor.run_angle(300,80)
+    ilan.right_medium_motor.run_angle(-300,80)
+
+
+def test_2():
+    ilan.right_medium_motor.run_angle(-300,30)
+
     wait(2000)
     # ilan.speed_formula(85, Forward_Is_True=False)
     ilan.straighten_on_black()
-
-def right_run():
-    wait(2000)
-    ilan.speed_formula(85)
-def up_run():
-    ilan.pid_follow_line_until_other_detect_color(2,ilan.color_sensor_left,ilan.color_sensor_right,100)
-    ilan.turn(90)
-    ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,100)
-    ilan.turn(90)
-    ilan.speed_formula(40)
-    ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,100)
-
-
-def down_run():
-    ilan.say("start")
-    ilan.move_wall_to_point(430, 370)
-    ilan.pid_gyro(30, 300)
-    ilan.pid_gyro_until_color(stop_color = Color.BLACK, Ts = 20, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02)
-        
     
-
-
 TEXT_MENU = """Choose Run: 
   < - Left run 
   > - Right AP 
@@ -132,28 +108,28 @@ def running ():
             if Button.LEFT in ilan.ev3.buttons.pressed():
                 
                 ilan.write("Left Run")
-                left_run() # הפעלת הריצה
+                test() # הפעלת הריצה
 
 
             # כפתור ימני - ראן צפון מערב
             elif Button.RIGHT in ilan.ev3.buttons.pressed():
 
                 ilan.write("Right Run")
-                right_run() # הפעלת הריצה
+                test_2()# הפעלת הריצה
 
 
             # כפתור תחתון - ראן מזרח (מכולות קרובות)
             elif Button.DOWN in ilan.ev3.buttons.pressed():
 
                 ilan.write("Down run")
-                down_run() # הפעלת הריצה (מכולות קרובות)
+                test_3() # הפעלת הריצה (מכולות קרובות)
 
 
             # כפתור עליון - ראן מזרח (מכולות רחוקות)
             elif Button.UP in ilan.ev3.buttons.pressed():
 
                 ilan.write("UP run")
-                run_2() # הפעלת הראן (מכולות רחוקות)
+                test_4() # הפעלת הראן (מכולות רחוקות)
 
 
             elif Button.CENTER in ilan.ev3.buttons.pressed():

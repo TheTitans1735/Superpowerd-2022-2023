@@ -19,11 +19,37 @@ def run_2():
     
 def run_4():
     
-    ilan.speed_formula(75,600,False)
-    ilan.turn(-37.5)
-    ilan.speed_formula(20,300,False)
-    ilan.drive_by_seconds(-70,3) #test by shachaf 7 pm
+    ilan.speed_formula(68,420,False,3.07)
+    ilan.turn(-30)
+    ilan.speed_formula(25,300,False)
+    ilan.straighten_on_black()
+    ilan.pid_gyro(4.5)
+    ilan.beep()
+    ilan.turn(-57)
+    #ilan.right_medium_motor.run_time(300,500)
+    ilan.right_medium_motor.run_angle(200,80)
+    ilan.pid_gyro(17)
+    # ilan.right_medium_motor.run_time(-300,500)
+    ilan.right_medium_motor.run_angle(-200,80)
+    ilan.beep()   
+    #ilan.turn_to_threshold(ilan.color_sensor_left,False,50)
+    ilan.turn(-32)
+    ilan.pid_follow_line(6,150,ilan.color_sensor_left)
+    ilan.wait_for_button("hola soy dora",True)
+    ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,150,False)
+    ilan.wait_for_button("hola soy dora",True)
+    ilan.turn(70)
+    ilan.wait_for_button("hola soy dora",True)
+    ilan.speed_formula(30,300,False)
+    ilan.say("hola soy dora")
+    # ilan.speed_formula(25,400,False)
+    # ilan.right_medium_motor.stop()
+    # ilan.speed_formula(15,400,False)
+
     
+    
+
+
 
 
 

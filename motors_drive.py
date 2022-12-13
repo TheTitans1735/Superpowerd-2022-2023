@@ -24,7 +24,7 @@ while True:
 
     # Respond to the Brick Button press.
     while True:
-        
+        motor_speed = 250
         
         angle = str(ilan.gyro_sensor.angle())
         if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "drive":
@@ -33,8 +33,8 @@ while True:
                 ilan.right_motor.run(-150)
                 ilan.wait_for_button(angle,debug = False)
         elif Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "motor":
-            ilan.left_medium_motor.run(500)
-            ilan.right_medium_motor.run(500)
+            ilan.left_medium_motor.run(motor_speed)
+            ilan.right_medium_motor.run(motor_speed)
 
         elif Button.LEFT in ilan.ev3.buttons.pressed()  and situation == "drive":
             while Button.LEFT in ilan.ev3.buttons.pressed():
@@ -42,8 +42,8 @@ while True:
                 ilan.right_motor.run(150)
                 ilan.wait_for_button(angle, debug = False)
         elif Button.LEFT in ilan.ev3.buttons.pressed()  and situation == "motor":
-            ilan.left_medium_motor.run(-500)
-            ilan.right_medium_motor.run(-500) 
+            ilan.left_medium_motor.run(-1 * motor_speed)
+            ilan.right_medium_motor.run(-1 * motor_speed) 
 
         elif Button.UP in ilan.ev3.buttons.pressed():
             

@@ -9,7 +9,7 @@ from pybricks.media import ev3dev
 from pybricks.parameters import Button, Color, Direction, Port, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import DataLog, StopWatch, wait
-
+import time
 # import datetime
 """
 All Robot actions
@@ -187,30 +187,31 @@ class Robot:
         
     def align_on_black_white(self,right_first):
         """מטרת פונקציה זו היא שהרובוט יתקן את עצמו בעצירה על קו"""
+        speed = 50
         if right_first == True:
             while(self.color_sensor_right.color() == Color.BLACK):
-                self.right_motor.run(-20)
+                self.right_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
                 self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.right_motor.hold()
 
 
             while(self.color_sensor_left.color() == Color.BLACK):
-                self.left_motor.run(-20)
+                self.left_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
                 self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.left_motor.hold()
 
         else:
             while(self.color_sensor_left.color() == Color.BLACK):
-                self.left_motor.run(-20)
+                self.left_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
                 self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.left_motor.hold()
 
 
             while(self.color_sensor_right.color() == Color.BLACK):
-                self.right_motor.run(-20)
+                self.right_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
                 self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.right_motor.hold()
@@ -502,7 +503,7 @@ class Robot:
         יצירת קובץ למדידת ערכי פיד אופטימליים
         """
         
-        # log_file_name = time.strftime("%Y_%m_%d_%H_%M_%S")
+        log_file_name = time.strftime("%Y_%m_%d_%H_%M_%S")
 
         # print file's name
         print(log_file_name)
@@ -696,6 +697,12 @@ class Robot:
     def run_straight (self, distance):
         self.robot.straight(distance * 10)
 
+    # def detect_line_on_turn(self,left_sensor = True):
+    #     if left_sensor == True :
+    #         SensorColor = self.color_sensor_left.color()
+    #     while SensorColor != Color.BLACK :
+    #         self.turn_to_threshold() 
+
 
 
     ##### TURN #####
@@ -859,7 +866,7 @@ class Robot:
 
         ## הפנייה ##
         # פנייה עד זיהוי הצבע השחור
-        while line_sensor.reflection() > 40:
+        while line_sensor.Color() != Color.BLACK:
             self.check_forced_exit()
             
             # הפעלת המנועים
