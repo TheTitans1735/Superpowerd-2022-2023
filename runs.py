@@ -7,8 +7,21 @@ ilan = Robot()
 
 
 
-def fast_to_slow_stop(ts1,td1,ts2,td2):
-    ts =300
+def run_1():
+    ilan.pid_gyro(10,precise_distance = False)
+    ilan.turn(-45)
+    ilan.speed_formula(52,400)
+    ilan.turn(90)
+    ilan.pid_gyro(10,Forward_Is_True = False)
+    ilan.pid_gyro(20)
+    wait(1000)    
+    for i in range (4):
+        ilan.pid_gyro(7,precise_distance = False)
+        wait(500)
+        ilan.pid_gyro(7.,Forward_Is_True = False)
+    ilan.turn(90)
+    ilan.speed_formula(40,400)
+
 def run_2():
     ilan.speed_formula(40.5,400)
     ilan.speed_formula(50.5,600,False)
@@ -26,26 +39,21 @@ def run_4():
     ilan.pid_gyro(4.5)
     ilan.beep()
     ilan.turn(-57)
-    #ilan.right_medium_motor.run_time(300,500)
     ilan.right_medium_motor.run_angle(200,80)
     ilan.pid_gyro(17)
-    # ilan.right_medium_motor.run_time(-300,500)
-    ilan.right_medium_motor.run_angle(-200,80)
+    ilan.right_medium_motor.run_angle(-200,90)
     ilan.beep()   
-    #ilan.turn_to_threshold(ilan.color_sensor_left,False,50)
     ilan.turn(-32)
-    ilan.pid_follow_line(6,150,ilan.color_sensor_left)
-    ilan.wait_for_button("hola soy dora",True)
-    ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,150,False)
-    ilan.wait_for_button("hola soy dora",True)
-    ilan.turn(70)
-    ilan.wait_for_button("hola soy dora",True)
+    ilan.pid_follow_line_until_other_detect_color(2,ilan.color_sensor_left,ilan.color_sensor_right,125,False)
+    ilan.turn(65)
     ilan.speed_formula(30,300,False)
-    ilan.say("hola soy dora")
-    # ilan.speed_formula(25,400,False)
-    # ilan.right_medium_motor.stop()
-    # ilan.speed_formula(15,400,False)
-
+    ilan.turn(30)
+    ilan.pid_gyro(2)
+    ilan.turn(40)
+    ilan.speed_formula(60,600)
+    ilan.turn(45)
+    ilan.speed_formula(40,400)
+    
     
     
 
@@ -67,6 +75,7 @@ TEXT_MENU = """Choose Run:
 def running ():
     """!! One Function To Rule Them All !!"""
     
+    ilan.say("please select run","m2",1000)
     while True:
 
 
@@ -86,7 +95,7 @@ def running ():
             if Button.LEFT in ilan.ev3.buttons.pressed():
                 
                 ilan.write("Left Run")
-                pass # הפעלת הריצה
+                run_1() # הפעלת הריצה
 
 
             # כפתור ימני - ראן צפון מערב

@@ -192,34 +192,34 @@ class Robot:
             while(self.color_sensor_right.color() == Color.BLACK):
                 self.right_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.right_motor.hold()
 
 
             while(self.color_sensor_left.color() == Color.BLACK):
                 self.left_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.left_motor.hold()
 
         else:
             while(self.color_sensor_left.color() == Color.BLACK):
                 self.left_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.left_motor.hold()
 
 
             while(self.color_sensor_right.color() == Color.BLACK):
                 self.right_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.right_motor.hold()
 
         self.robot.stop()
 
         
-    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.1, Ki= 0.025, Kd =3.3, alternative_cond = lambda : True):
+    def pid_gyro(self, Td, Ts = 150, Forward_Is_True = True, Kp = 3.1, Ki= 0.025, Kd =3.3, alternative_cond = lambda : True,precise_distance = True):
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
         """
@@ -301,7 +301,9 @@ class Robot:
         self.right_motor.brake()
 
         print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
-        
+         
+        if precise_distance == False :
+            return 
         wait(200) # כדי שאילן יגיע לעצירה מוחלטת לגמרי
         
         if Forward_Is_True:
@@ -641,7 +643,7 @@ class Robot:
             if target_reflection == -1:
 
                 # אם החיישן הימני מזהה שחור
-                if self.color_sensor_right.color() == Color.BLACK:
+                if self.color_sensor_right.color() == stop_color:
                     right_sensor_flag = True
 
                     # הגדרת האור המוחזר הרצוי כאור שהחיישן הימני קולט
