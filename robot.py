@@ -643,7 +643,7 @@ class Robot:
             if target_reflection == -1:
 
                 # אם החיישן הימני מזהה שחור
-                if self.color_sensor_right.color() == stop_color:
+                if self.color_sensor_right.color() == Color.BLACK:
                     right_sensor_flag = True
 
                     # הגדרת האור המוחזר הרצוי כאור שהחיישן הימני קולט

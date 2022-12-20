@@ -8,34 +8,74 @@ ilan = Robot()
 
 
 def run_1():
+
+    """מבצע את משימות M07,M15"""
+
+    #  ביצוע משימה M15
+
     ilan.pid_gyro(10,precise_distance = False)
     ilan.turn(-45)
     ilan.speed_formula(52,400)
+    
+    # התיישרות על משימה M14
+
     ilan.turn(90)
-    ilan.pid_gyro(10,Forward_Is_True = False)
-    ilan.pid_gyro(20)
-    wait(1000)    
+    ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
+    ilan.pid_gyro(20,precise_distance = True)
+
+    #  ביצוע משימה M15
+     
     for i in range (4):
-        ilan.pid_gyro(7,precise_distance = False)
+        ilan.pid_gyro(12 + i,200,precise_distance = False)
         wait(500)
-        ilan.pid_gyro(7.,Forward_Is_True = False)
+        ilan.pid_gyro(12,200,Forward_Is_True = False,precise_distance = False)
+
+    # חזרה הביתה
+
+    ilan.pid_gyro(5,200,Forward_Is_True =  False,precise_distance = False)
     ilan.turn(90)
-    ilan.speed_formula(40,400)
+    ilan.speed_formula(60,600)
 
 def run_2():
+
+    """מבצע את משימות M08,M14"""
+
+    #  ביצוע משימה M08
+
     ilan.speed_formula(40.5,400)
     ilan.speed_formula(50.5,600,False)
+
+    # ביצוע משימה M14
+
     ilan.turn(-48)
     ilan.speed_formula(45,500)
     ilan.pid_gyro(5,200)
+
+    # חזרה הביתה
+
     ilan.speed_formula(45,600,False)
     
 def run_4():
+
+    """מבצע את משימה M04 ואוסף את יחידות המים"""
+
     
+
+    # נסיעה ברוורס למשימה M04
+
     ilan.speed_formula(68,420,False,3.07)
     ilan.turn(-30)
+
+    # אסיפת 2יחידות אנרגיה ממשימה M04
+
     ilan.speed_formula(25,300,False)
-    ilan.straighten_on_black()
+
+    # התיישרות על קו
+
+    ilan.straighten_on_black(60)
+
+    # אסיפת יחידות מים
+
     ilan.pid_gyro(4.5)
     ilan.beep()
     ilan.turn(-57)
@@ -43,16 +83,27 @@ def run_4():
     ilan.pid_gyro(17)
     ilan.right_medium_motor.run_angle(-200,90)
     ilan.beep()   
+
+    # נסיעה על קו
+
     ilan.turn(-32)
-    ilan.pid_follow_line_until_other_detect_color(2,ilan.color_sensor_left,ilan.color_sensor_right,125,False)
+    ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,125,False,stop_color = Color.BLACK)
+
+    # אסיפת יחידת האנרגיה האחרונה ממשימה M04
+
     ilan.turn(65)
     ilan.speed_formula(30,300,False)
+
+    # חזרה הביתה
+
     ilan.turn(30)
-    ilan.pid_gyro(2)
-    ilan.turn(40)
-    ilan.speed_formula(60,600)
-    ilan.turn(45)
-    ilan.speed_formula(40,400)
+    ilan.pid_gyro(2,precise_distance = False)
+    ilan.turn(30)
+    ilan.speed_formula(105,600)
+    # ilan.turn(-45)
+    # ilan.pid_gyro(5,precise_distance = False)
+    # ilan.turn(45)
+    # ilan.speed_formula(40,400)
     
     
     
@@ -74,6 +125,8 @@ TEXT_MENU = """Choose Run:
 
 def running ():
     """!! One Function To Rule Them All !!"""
+
+    
     
     ilan.say("please select run","m2",1000)
     while True:
