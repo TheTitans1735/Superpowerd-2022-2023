@@ -627,7 +627,7 @@ class Robot:
             speed = speed * -1
 
         # התחלת הנסיעה
-        self.right_motor.run(speed)
+        self.right_motor.run(speed) 
         self.left_motor.run(speed)
 
         right_sensor_flag = False
@@ -638,7 +638,7 @@ class Robot:
         ## כל עוד שני החיישנים עוד לא זיהו שחור ##
         while (right_sensor_flag == False or left_sensor_flag == False):
             self.check_forced_exit()
-
+        
             # אם הרובוט עוד לא זיהה שחור באחד החיישנים
             if target_reflection == -1:
 
@@ -661,7 +661,7 @@ class Robot:
 
                 # הדפסת הצבע שהחיישנים קולטים
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
 
             # אם אחד מהחיישנים זיהה צבע שחור
             else:
@@ -681,14 +681,14 @@ class Robot:
                     self.left_motor.hold()
 
                 # הדפסת האור שמוחזר בשני החיישנים
-                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
+                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()) + " T: " + str(target_reflection))
 
             wait(10)
         self.align_on_black_white(right_first)
-        
+
         # הדפסת האור והצבע ששני החיישנים קוראים
-        self.write("C Left: " + str(self.color_sensor_left.color()))
-        self.write("C Right: " + str(self.color_sensor_right.color()))
+        #self.write("C Left: " + str(self.color_sensor_left.color()))
+        #self.write("C Right: " + str(self.color_sensor_right.color()))
         self.write("R Left: " + str(self.color_sensor_left.reflection()))
         self.write("R Right: " + str(self.color_sensor_right.reflection()))
 

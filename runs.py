@@ -1,12 +1,26 @@
 #!/usr/bin/env pybricks-micropython
 from robot import *
+import time
+from functools import wraps
+
+def timeit(func):
+    @wraps(func)
+    def timeit_wrapper(*args, **kwargs):
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        total_time = end_time - start_time
+        print('Function {}{} {} Took {} seconds'.format(func.__name__, args, kwargs, total_time))
+        return result
+    return timeit_wrapper
+
 
 ilan = Robot()
 
 ##### Center Run #####
 
 
-
+@timeit
 def run_1():
 
     """מבצע את משימות M07,M15"""
@@ -36,6 +50,7 @@ def run_1():
     ilan.turn(90)
     ilan.speed_formula(60,600)
 
+@timeit
 def run_2():
 
     """מבצע את משימות M08,M14"""
@@ -54,12 +69,13 @@ def run_2():
     # חזרה הביתה
 
     ilan.speed_formula(45,600,False)
-    
+
+@timeit
 def run_4():
 
     """מבצע את משימה M04 ואוסף את יחידות המים"""
 
-    
+    debug = False
 
     # נסיעה ברוורס למשימה M04
 
@@ -71,13 +87,14 @@ def run_4():
     ilan.speed_formula(25,300,False)
 
     # התיישרות על קו
-
+    ilan.wait_for_button("40 - Align on black", debug)
     ilan.straighten_on_black(60)
 
     # אסיפת יחידות מים
-
+    ilan.wait_for_button("50 - drive 4.5 cm", debug)
     ilan.pid_gyro(4.5)
     ilan.beep()
+    ilan.wait_for_button("60 - turn", debug)
     ilan.turn(-57)
     ilan.right_medium_motor.run_angle(200,80)
     ilan.pid_gyro(17)
@@ -104,6 +121,28 @@ def run_4():
     # ilan.pid_gyro(5,precise_distance = False)
     # ilan.turn(45)
     # ilan.speed_formula(40,400)
+
+@timeit
+def run_5():
+
+    # הקוד המקורי
+    ilan.pid_gyro(20,100,precise_distance = False,Forward_Is_True = False)
+    ilan.wait_for_button("or is dum ")
+    ilan.turn(-2)
+    ilan.pid_gyro(10,precise_distance = False)
+
+#ניסוי התיישרות על קו
+    ilan.pid_gyro_until_color1()
+    ilan.straighten_on_black(100)
+
+
+    ilan.speed_formula(70,300) 
+    ilan.straighten_on_black(200)
+    ilan.turn(55)
+    ilan.speed_formula(20,300,False)
+    ilan.turn(-31)
+    ilan.pid_gyro(5,precise_distance = False)
+
     
     
     
@@ -127,8 +166,10 @@ def running ():
     """!! One Function To Rule Them All !!"""
 
     
+
     
-    ilan.say("please select run","m2",1000)
+    ilan.say("at that moment he knew    ,,,,,,,,,,,,,,,,,,,,,,,,, he fucked up,","m2",1000)
+    
     while True:
 
 
@@ -162,7 +203,7 @@ def running ():
             elif Button.DOWN in ilan.ev3.buttons.pressed():
 
                 ilan.write("Down run")
-                pass # הפעלת הריצה (מכולות קרובות)
+                run_5() # הפעלת הריצה (מכולות קרובות)
 
 
             # כפתור עליון - ראן מזרח (מכולות רחוקות)

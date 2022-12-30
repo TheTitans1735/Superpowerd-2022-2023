@@ -59,8 +59,8 @@ def center_run():
     # (: זה הג'וק שהקפיץ את השפריץ של המיץ לעציץ על השפיץ של הקפיץ בחריץ המסוכן האור ההר
     # ilan.say("ze hajuk shehekpitz et hashpritz shel hamitlahatzitz al hashpitz shel hakfitz baharitz hamesukan behor hahar")
 
-def test_4(ts1,td1,ts2,td2):
-   ilan.right_medium_motor.run_until_stalled(-300)
+def test_4():
+    ilan.straighten_on_black(200)
 def test_3():
     ilan.right_medium_motor.run_until_stalled(300)
 
