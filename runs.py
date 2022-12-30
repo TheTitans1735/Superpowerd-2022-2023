@@ -11,6 +11,7 @@ def timeit(func):
         end_time = time.perf_counter()
         total_time = end_time - start_time
         print('Function {}{} {} Took {} seconds'.format(func.__name__, args, kwargs, total_time))
+        ilan.say("run Took {} seconds".format(total_time))
         return result
     return timeit_wrapper
 
@@ -92,14 +93,13 @@ def run_4():
 
     # אסיפת יחידות מים
     ilan.wait_for_button("50 - drive 4.5 cm", debug)
-    ilan.pid_gyro(4.5)
+    ilan.pid_gyro(4.5,precise_distance = False)
     ilan.beep()
     ilan.wait_for_button("60 - turn", debug)
     ilan.turn(-57)
-    ilan.right_medium_motor.run_angle(200,80)
+    ilan.right_medium_motor.run_angle(200,80,wait = False)
     ilan.pid_gyro(17)
-    ilan.right_medium_motor.run_angle(-200,90)
-    ilan.beep()   
+    ilan.right_medium_motor.run_angle(-300,90)
 
     # נסיעה על קו
 
@@ -116,7 +116,7 @@ def run_4():
     ilan.turn(30)
     ilan.pid_gyro(2,precise_distance = False)
     ilan.turn(30)
-    ilan.speed_formula(105,600)
+    ilan.pid_gyro(105,600,precise_distance = False)
     # ilan.turn(-45)
     # ilan.pid_gyro(5,precise_distance = False)
     # ilan.turn(45)
