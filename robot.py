@@ -9,6 +9,7 @@ from pybricks.media import ev3dev
 from pybricks.parameters import Button, Color, Direction, Port, Stop
 from pybricks.robotics import DriveBase
 from pybricks.tools import DataLog, StopWatch, wait
+
 import time
 # import datetime
 """
@@ -323,9 +324,13 @@ class Robot:
         
     ##### PID GYRO UNTIL COLOR #####
 
-    def pid_gyro_until_color(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
+    def pid_gyro_until_color_in_one_sensor(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02,):
+        stop_if_one_black = lambda: self.color_sensor_right.color() != stop_color and self.color_sensor_left.color() != stop_color
+        self.pid_gyro(100, alternative_cond=stop_if_one_black,precise_distance = False)
+
+    def pid_gyro_until_color_in_two_sensor(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
         stop_if_both_black = lambda: self.color_sensor_right.color() != stop_color or self.color_sensor_left.color() != stop_color
-        self.pid_gyro(100, alternative_cond=stop_if_both_black)
+        self.pid_gyro(100, alternative_cond=stop_if_both_black,precise_distance = False)
 
     def pid_gyro_until_color1(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
         """
@@ -1000,6 +1005,24 @@ class Robot:
         while ColorSensor.reflection() != color:
             wait(1)            
         self.robot.stop()
+
+
+        
+    def gyro_reset(self):
+        self.ev3.light.on(Color.RED)
+        wait(600)   
+        #מדידת מהירות זוויתית
+        print(self.gyro_sensor.speed())
+        #איפוס הגירו
+        self.gyro_sensor.reset_angle(0)
+        #מדידת זווית
+        print(self.gyro_sensor.angle())
+        #מדידת זווית
+        self.gyro_sensor.reset_angle(0)
+        wait(400)
+        self.ev3.light.off()
+
+
 
 ##### The End :) #####
 if __name__ == '__main__':
