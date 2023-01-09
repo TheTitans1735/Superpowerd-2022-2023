@@ -126,12 +126,12 @@ def run_4():
 
 @timeit
 def run_5():   
-    ilan.pid_gyro(47,150,precise_distance = False)
+    ilan.pid_gyro(44,150,precise_distance = False)
     # ilan.pid_gyro_until_color_in_one_sensor(Ts = 300) 
-    ilan.turn(-30)
+    ilan.turn(-32)
     ilan.pid_gyro(20,200,precise_distance = False)
     ilan.pid_gyro(7,300,precise_distance = False)
-    ilan.pid_gyro(75,300,False,precise_distance = False)
+    ilan.pid_gyro(74,300,False,precise_distance = False)
 
 
 @timeit
