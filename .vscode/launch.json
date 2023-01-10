@@ -27,6 +27,13 @@
 			"interactiveTerminal": false
 		},
 		{
+			"name": "Test_runs",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/test_runs.py",
+			"interactiveTerminal": false
+		},
+		{
 			"name": "Main Download and Run",
 			"type": "ev3devBrowser",
 			"request": "launch",

@@ -185,65 +185,41 @@ def running ():
     
     """!! One Function To Rule Them All !!"""
 
-    # ilan.gyro_reset()
+    situation = "1-4"
+    ilan.write("\t2\n3\  v  t1\n\t4")
 
     while True:
 
-
+            
+            
+        if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "1-4":
+            run_1()
+        elif  Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "3-6":
+            run_5()
         
-        try:
-            # מדפיס את טקסט הריצות על הרובוט ועל מסך המחשב
-            
-            ilan.write(TEXT_MENU)
-            
-            
-            # מחכה ללחיצת כפתור
-            while not any(ilan.ev3.buttons.pressed()):
-                wait(60)
-            
+        if Button.UP in ilan.ev3.buttons.pressed() and situation == "1-4":
+            run_2()
+        elif  Button.UP in ilan.ev3.buttons.pressed() and situation == "3-6":
+            run_6()
 
-            # כפתור עליון - run_1
-            if Button.UP in ilan.ev3.buttons.pressed():
-                
-                ilan.write("run_1")
-                run_1() # הפעלת הריצה
+        if Button.LEFT in ilan.ev3.buttons.pressed():
+            run_3()
 
-            # כפתור ימני - run_2
-            elif Button.RIGHT in ilan.ev3.buttons.pressed():
+        if Button.DOWN in ilan.ev3.buttons.pressed():
+            run_4()
 
-                ilan.write("run_2")
-                run_2() # הפעלת הריצה
+        if Button.CENTER in ilan.ev3.buttons.pressed() and situation == "1-4":
+            situation = "3-6"
+            ilan.write("\t6\n3\t5\n\t4")
+
+        elif Button.CENTER in ilan.ev3.buttons.pressed() and situation == "3-6":
+            situation = "1-4"
+            ilan.write("\t2\n3\t1\n\t4")
 
 
-            # כפתור תחתון - run_3
-            elif Button.DOWN in ilan.ev3.buttons.pressed():
 
-                ilan.write("run_3")
-                run_3() # הפעלת הריצה
-
-
-            # כפתור שמאלי - run_4
-            elif Button.LEFT in ilan.ev3.buttons.pressed():
-
-                ilan.write("run_4")
-                run_4() # הפעלת הריצה
-
-            # כפתור אמצעי - run_5
-            elif Button.CENTER in ilan.ev3.buttons.pressed():
-
-                ilan.write("run_5")
-                run_5() # הפעלת הראן
-            
-
-            # כפתור כפתור עליון וכפתור תחתון - run_6
-            elif Button.DOWN in ilan.ev3.buttons.pressed() and Button.UP in ilan.ev3.buttons.pressed():
-
-                ilan.write("run_6")
-                run_6() # הפעלת הראן
-
-
-        except Exception as ex:
-            print("Error: {}".format(ex))
-            wait(2500)
+    # except Exception as ex:
+    # print("Error: {}".format(ex))
+    # wait(2500)
 
 running()
