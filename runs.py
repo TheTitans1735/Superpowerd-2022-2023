@@ -139,7 +139,7 @@ def run_5():
 
     #נסיעה לM03
 
-    ilan.pid_gyro(44,150,precise_distance = False)
+    ilan.pid_gyro(43,150,precise_distance = False)
     ilan.turn(-32)
     ilan.pid_gyro(20,200,precise_distance = False)
 
@@ -157,13 +157,17 @@ def run_5():
 
 @timeit
 def run_6():
-
+    #11/1 איה ורתם עדכנו לא לגעת עד לבנית סרגל שיגור
     """ביצוע משימות M11,M12"""
-
-    ilan.speed_formula(80,600)
-    ilan.turn(60)
-    ilan.pid_gyro(80,200,False,precise_distance = False)
-    ilan.turn(-5)
+    ilan.beep()
+    ilan.speed_formula(65,300)
+    #ilan.pid_gyro(20,200,True,precise_distance = True)
+    
+    ilan.turn(75)
+    
+    ilan.pid_gyro(11,90,False,precise_distance = True)
+    ilan.wait_for_button()
+    ilan.turn(-10)
     ilan.pid_gyro(20,200,precise_distance = False)
 
 
@@ -205,8 +209,10 @@ def running ():
             # כפתור עליון - run_1
             if Button.UP in ilan.ev3.buttons.pressed():
                 
-                ilan.write("run_1")
-                run_1() # הפעלת הריצה
+                #ilan.write("run_1")
+                #run_1() # הפעלת הריצה
+                ilan.write("run 6 remember to change to 1")
+                run_6()
 
             # כפתור ימני - run_2
             elif Button.RIGHT in ilan.ev3.buttons.pressed():
