@@ -1,4 +1,5 @@
 #!/usr/bin/env pybricks-micropython
+
 from robot import *
 import time
 from functools import wraps
@@ -61,17 +62,17 @@ def run_2():
     #  ביצוע משימה M08
 
     ilan.speed_formula(40.5,400)
-    ilan.speed_formula(50.5,600,False)
+    ilan.speed_formula(49,400,False)
 
     # ביצוע משימה M14
 
-    ilan.turn(-47.5,175)
-    ilan.speed_formula(45,500)
-    ilan.pid_gyro(5,200)
+    ilan.turn(-50,150)
+    ilan.speed_formula(45,300)
+    ilan.pid_gyro(2,200)
 
     # חזרה הביתה
 
-    ilan.pid_gyro(45,400,False,precise_distance = False)
+    ilan.speed_formula(40,500,False)
 
 
 
@@ -158,12 +159,17 @@ def run_5():
 @timeit
 def run_6():
 
+    #11/1 איה ורתם עדכנו לא לגעת עד לבנית סרגל שיגור
     """ביצוע משימות M11,M12"""
-
-    ilan.speed_formula(80,600)
-    ilan.turn(60)
-    ilan.pid_gyro(80,200,False,precise_distance = False)
-    ilan.turn(-5)
+    ilan.beep()
+    ilan.speed_formula(65,300)
+    #ilan.pid_gyro(20,200,True,precise_distance = True)
+    
+    ilan.turn(75)
+    
+    ilan.pid_gyro(11,90,False,precise_distance = True)
+    ilan.wait_for_button()
+    ilan.turn(-10)
     ilan.pid_gyro(20,200,precise_distance = False)
 
 

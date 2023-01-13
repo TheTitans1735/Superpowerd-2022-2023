@@ -1,4 +1,5 @@
 #!/usr/bin/env pybricks-micropython
+
 from robot import *
 import time
 from functools import wraps
@@ -209,10 +210,8 @@ def running ():
             # כפתור עליון - run_1
             if Button.UP in ilan.ev3.buttons.pressed():
                 
-                #ilan.write("run_1")
-                #run_1() # הפעלת הריצה
-                ilan.write("run 6 remember to change to 1")
-                run_6()
+                ilan.write("run_1")
+                run_1() # הפעלת הריצה
 
             # כפתור ימני - run_2
             elif Button.RIGHT in ilan.ev3.buttons.pressed():
@@ -238,7 +237,8 @@ def running ():
             elif Button.CENTER in ilan.ev3.buttons.pressed():
 
                 ilan.write("run_5")
-                run_5() # הפעלת הראן
+                run_5()
+                 # הפעלת הראן
             
 
             # כפתור כפתור עליון וכפתור תחתון - run_6
