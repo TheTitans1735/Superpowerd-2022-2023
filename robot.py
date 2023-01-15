@@ -617,6 +617,8 @@ class Robot:
             # נסיעה עד זיהוי תנאי העצירה - זיהוי הקו השחור
             self.pid_follow_line(150, speed, follow_color_sensor, stop_condition = stop_on_black, Kp = kp, white_is_right = white_is_right, Ki = ki, Kd = kd)
             self.beep()
+        self.right_motor.stop()
+        self.left_motor.stop()
     
     
     

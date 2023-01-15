@@ -12,7 +12,7 @@ def timeit(func):
         end_time = time.perf_counter()
         total_time = end_time - start_time
         print('Function {}{} {} Took {} seconds'.format(func.__name__, args, kwargs, total_time))
-        print()("run Took {} seconds".format(total_time))
+        # print()("run Took {} seconds".format(total_time))
         return result
     return timeit_wrapper
 
@@ -50,7 +50,7 @@ def run_1():
 
     ilan.pid_gyro(5,200,Forward_Is_True =  False,precise_distance = False)
     ilan.turn(90)
-    ilan.pid_gyro(60,400,precise_distance = False)
+    ilan.pid_gyro(58,400,precise_distance = False)
 
 
 
@@ -59,7 +59,7 @@ def run_2():
 
     """מבצע את משימות M08,M14"""
 
-    #  ביצוע משימה M08
+    #  ביצוע משימה M08 
 
     ilan.speed_formula(40.5,400)
     ilan.speed_formula(49,400,False)
@@ -78,7 +78,24 @@ def run_2():
 
 @timeit
 def run_3():
-    pass
+    #Worked well 14/1/23
+    #ilan.pid_gyro(65,200,precise_distance = False)
+    ilan.speed_formula(74, 400)
+    #ilan.wait_for_button("1",True)
+    #ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,80,False, kp=0.72, ki=0.02, kd=0.076)
+    #ilan.pid_gyro(9,80,False)
+    ilan.left_medium_motor.run_angle(400,-100)
+    #ilan.wait_for_button("2",True)
+    #ilan.pid_gyro(4,80)
+    #ilan.turn(-2, 70)
+    ilan.right_medium_motor.run_angle(350,110)
+    #wait(800)
+    #ilan.right_medium_motor.run_angle(300,-50)
+    #wait(800)
+    #ilan.right_medium_motor.run_angle(400,50)
+    #ilan.turn(2, 70)
+
+    ilan.pid_gyro(80,200,precise_distance = False)
 
 
 
@@ -162,13 +179,18 @@ def run_6():
     #11/1 איה ורתם עדכנו לא לגעת עד לבנית סרגל שיגור
     """ביצוע משימות M11,M12"""
     ilan.beep()
-    ilan.speed_formula(65,300)
-    #ilan.pid_gyro(20,200,True,precise_distance = True)
-    
+    ilan.speed_formula(75,300)
+    ilan.turn(-20)
+
+   # ilan.pid_gyro(1.5,90,False,precise_distance = True)
+
+    ilan.pid_gyro(6,90,False,precise_distance = True)
+
+    ilan.turn(25)
     ilan.turn(75)
     
-    ilan.pid_gyro(11,90,False,precise_distance = True)
-    ilan.wait_for_button()
+    ilan.pid_gyro(12,90,False,precise_distance = True)
+    
     ilan.turn(-10)
     ilan.pid_gyro(20,200,precise_distance = False)
 
