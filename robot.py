@@ -672,25 +672,26 @@ class Robot:
 
             # אם אחד מהחיישנים זיהה צבע שחור
             else:
-
+                left_reflection = self.color_sensor_left.reflection()
+                right_reflection = self.color_sensor_right.reflection()
                 # אם החיישן הימני זיהה שחור
-                if self.color_sensor_right.reflection() <= target_reflection:
+                if right_reflection <= target_reflection:
                     right_sensor_flag = True
 
                     # עצור את המנוע הימני
                     self.right_motor.hold()
 
                 # אם החיישן השמאלי זיהה שחור
-                if self.color_sensor_left.reflection() <= target_reflection:
+                if left_reflection <= target_reflection:
                     left_sensor_flag = True
 
                     # עצור את המנוע השמאלי
                     self.left_motor.hold()
 
                 # הדפסת האור שמוחזר בשני החיישנים
-                self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()) + " T: " + str(target_reflection))
+                self.write("L: " + str(left_reflection) + " R: " + str(right_reflection) + " T: " + str(target_reflection))
 
-            wait(10)
+            wait(1)
         self.align_on_black_white(right_first)
 
         # הדפסת האור והצבע ששני החיישנים קוראים

@@ -12,7 +12,7 @@ def timeit(func):
         end_time = time.perf_counter()
         total_time = end_time - start_time
         print('Function {}{} {} Took {} seconds'.format(func.__name__, args, kwargs, total_time))
-        # print()("run Took {} seconds".format(total_time))
+        ilan.write("Run time: {} sec.".format(round(total_time, 1)))
         return result
     return timeit_wrapper
 
@@ -48,8 +48,8 @@ def run_1():
 
     # חזרה הביתה
 
-    ilan.pid_gyro(5,200,Forward_Is_True =  False,precise_distance = False)
-    ilan.turn(90)
+    ilan.pid_gyro(5,400,Forward_Is_True =  False,precise_distance = False)
+    ilan.turn(90,200)
     ilan.pid_gyro(58,400,precise_distance = False)
 
 
@@ -66,13 +66,13 @@ def run_2():
 
     # ביצוע משימה M14
 
-    ilan.turn(-50,150)
+    ilan.turn(-45,150)
     ilan.speed_formula(45,300)
     ilan.pid_gyro(2,200)
 
     # חזרה הביתה
 
-    ilan.speed_formula(40,500,False)
+    ilan.speed_formula(42,500,False)
 
 
 
@@ -95,7 +95,7 @@ def run_3():
     #ilan.right_medium_motor.run_angle(400,50)
     #ilan.turn(2, 70)
 
-    ilan.pid_gyro(80,200,precise_distance = False)
+    ilan.pid_gyro(90,400,precise_distance = False)
 
 
 
@@ -108,16 +108,22 @@ def run_4():
 
     # נסיעה ברוורס למשימה M04
 
+    ilan.wait_for_button("10 - drive", debug)
     ilan.speed_formula(68,420,False,3.07)
+
+    ilan.wait_for_button("20 - turn", debug)
     ilan.turn(-30)
 
     # אסיפת 2יחידות אנרגיה ממשימה M04
 
+    ilan.wait_for_button("30 - drive", debug)
     ilan.speed_formula(25,300,False)
 
     # התיישרות על קו
 
-    ilan.wait_for_button("40 - Align on black", debug)
+    ilan.wait_for_button("40 - Run until color", debug)
+    ilan.pid_gyro_until_color_in_one_sensor(Color.WHITE)
+    ilan.wait_for_button("42 - Align on black", debug)
     ilan.straighten_on_black(60)
 
     # אסיפת יחידות מים
@@ -127,13 +133,14 @@ def run_4():
     ilan.beep()
     ilan.wait_for_button("60 - turn", debug)
     ilan.turn(-57)
-    ilan.right_medium_motor.run_angle(200,80,wait = False)
-    ilan.pid_gyro(17)
-    ilan.right_medium_motor.run_angle(-300,90)
+    ilan.right_medium_motor.run_angle(1500,80,wait = False)
+    ilan.pid_gyro(17,precise_distance = False)
+    ilan.right_medium_motor.run_angle(-150,90)
 
     # נסיעה על קו
 
     ilan.turn(-32)
+    ilan.pid_gyro_until_color_in_one_sensor()
     ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,125,False,stop_color = Color.BLACK)
 
     # אסיפת יחידת האנרגיה האחרונה ממשימה M04
@@ -147,7 +154,7 @@ def run_4():
     ilan.pid_gyro(2,precise_distance = False)
     ilan.turn(30)
     ilan.pid_gyro(105,600,precise_distance = False)
-   
+
 
 
 @timeit
@@ -158,12 +165,12 @@ def run_5():
     #נסיעה לM03
 
     ilan.pid_gyro(44,150,precise_distance = False)
-    ilan.turn(-32)
-    ilan.pid_gyro(20,200,precise_distance = False)
+    ilan.turn(-30)
+    ilan.pid_gyro(22,170,precise_distance = False)
 
-    #שפיכת יחידות האנרגיה למשימה
+    #שפיכת יחידות האנרגיה למשימה 
 
-    ilan.pid_gyro(7,300,precise_distance = False)
+    ilan.pid_gyro(7,270,precise_distance = False)
 
     #לקיחת יחידת האנרגיה וחזרה הביתה
 
@@ -180,14 +187,8 @@ def run_6():
     """ביצוע משימות M11,M12"""
     ilan.beep()
     ilan.speed_formula(75,300)
-    ilan.turn(-20)
-
-   # ilan.pid_gyro(1.5,90,False,precise_distance = True)
-
-    ilan.pid_gyro(6,90,False,precise_distance = True)
-
-    ilan.turn(25)
-    ilan.turn(75)
+   
+    ilan.turn(70)
     
     ilan.pid_gyro(12,90,False,precise_distance = True)
     
@@ -213,8 +214,9 @@ def running ():
     
     """!! One Function To Rule Them All !!"""
 
+    ilan.say("Started")
     situation = "1-4"
-    ilan.write("\t2\n3\  v  t1\n\t4")
+    ilan.write("\t2\n3   v   1\n\t4")
 
     while True:
 

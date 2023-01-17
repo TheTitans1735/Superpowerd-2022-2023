@@ -5,9 +5,11 @@ from functools import wraps
 
 ilan = Robot()
 
-
-def wheal_clean():
+def forwards():
     ilan.run_straight(5000)
 
+def Backwards():
+    ilan.run_straight(-5000)
 
-wheal_clean()
+
+forwards()

@@ -60,6 +60,13 @@
 			"request": "launch",
 			"program": "/home/robot/${workspaceRootFolderName}/wireless control.py",
 			"interactiveTerminal": false
+		},
+		{
+			"name": "Wheal clean",
+			"type": "ev3devBrowser",
+			"request": "launch",
+			"program": "/home/robot/${workspaceRootFolderName}/wheal_clean.py",
+			"interactiveTerminal": false
 		}
 	]
 }
