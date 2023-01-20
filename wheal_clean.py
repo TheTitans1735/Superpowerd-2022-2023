@@ -11,5 +11,7 @@ def forwards():
 def Backwards():
     ilan.run_straight(-5000)
 
+def anoyying():
+    ilan.check_gyro()
 
-forwards()
+    anoyying()

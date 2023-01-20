@@ -62,7 +62,7 @@
 			"interactiveTerminal": false
 		},
 		{
-			"name": "Wheal clean",
+			"name": "Wheel clean",
 			"type": "ev3devBrowser",
 			"request": "launch",
 			"program": "/home/robot/${workspaceRootFolderName}/wheal_clean.py",

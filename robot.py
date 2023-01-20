@@ -324,7 +324,7 @@ class Robot:
         
     ##### PID GYRO UNTIL COLOR #####
 
-    def pid_gyro_until_color_in_one_sensor(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02,):
+    def  pid_gyro_until_color_in_one_sensor(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02,):
         stop_if_one_black = lambda: self.color_sensor_right.color() != stop_color and self.color_sensor_left.color() != stop_color
         self.pid_gyro(100, alternative_cond=stop_if_one_black,precise_distance = False)
 

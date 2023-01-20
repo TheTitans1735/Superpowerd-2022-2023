@@ -28,8 +28,9 @@ def run_1():
     """מבצע את משימות M07,M15"""
 
     #  ביצוע משימה M15
+    # 2023-01-18 rtm changed the run - added slide in front of arm. More accurate - so reduced 4->3 times push
 
-    ilan.pid_gyro(10,precise_distance = False)
+    ilan.pid_gyro(14,precise_distance = False)
     ilan.turn(-45)
     ilan.speed_formula(52,500)
     
@@ -37,11 +38,11 @@ def run_1():
 
     ilan.turn(90)
     ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
-    ilan.pid_gyro(20,precise_distance = False)
+    ilan.pid_gyro(16,precise_distance = False)
 
     #  ביצוע משימה M15
      
-    for i in range (4):
+    for i in range (3):
         ilan.pid_gyro(12 + i,200,precise_distance = False)
         wait(500)
         ilan.pid_gyro(12,200,Forward_Is_True = False,precise_distance = False)
@@ -61,12 +62,12 @@ def run_2():
 
     #  ביצוע משימה M08 
 
-    ilan.speed_formula(40.5,400)
+    ilan.speed_formula(41 ,400)
     ilan.speed_formula(49,400,False)
 
     # ביצוע משימה M14
 
-    ilan.turn(-45,150)
+    ilan.turn(-50,150)
     ilan.speed_formula(45,300)
     ilan.pid_gyro(2,200)
 
@@ -80,7 +81,7 @@ def run_2():
 def run_3():
     #Worked well 14/1/23
     #ilan.pid_gyro(65,200,precise_distance = False)
-    ilan.speed_formula(74, 400)
+    ilan.speed_formula(74, 450)
     #ilan.wait_for_button("1",True)
     #ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,80,False, kp=0.72, ki=0.02, kd=0.076)
     #ilan.pid_gyro(9,80,False)
@@ -181,22 +182,52 @@ def run_5():
 
 
 @timeit
-def run_6():
+def run_6a():
 
-    #11/1 איה ורתם עדכנו לא לגעת עד לבנית סרגל שיגור
-    """ביצוע משימות M11,M12"""
-    ilan.beep()
-    ilan.speed_formula(75,300)
-   
-    ilan.turn(70)
-    
-    ilan.pid_gyro(12,90,False,precise_distance = True)
-    
-    ilan.turn(-10)
-    ilan.pid_gyro(20,200,precise_distance = False)
+    ilan.speed_formula(85, Kp=3.1, Ki=0.03)
+    ilan.pid_gyro_until_color_in_one_sensor(Ts = 100)
+    ilan.pid_gyro_until_color_in_one_sensor(Color.WHITE,100)
+    ilan.pid_gyro(3, 80,precise_distance = False)
+    ilan.turn(-125)
+    ilan.pid_gyro(12, 120,precise_distance = False)
+    #ilan.drive_by_seconds(100,1.5)
+    ilan.robot.drive(150, 0)
+    wait(1300)
+    ilan.robot.stop()
 
+    ilan.right_medium_motor.run_angle(200, -135)
+    ilan.pid_gyro(20, 150, False,precise_distance = False)
+    ilan.turn(-50) 
+    ilan.pid_gyro(65,300,precise_distance = False) 
+#    ilan.pid_gyro(72,300,precise_distance = False)
+#    ilan.turn(-105)
+#    ilan.pid_gyro(17,precise_distance = False)
+#    ilan.right_medium_motor.run_angle(200,-135)
+#    ilan.pid_gyro(17,Forward_Is_True = False, precise_distance = False)
+#    ilan.turn(115)
+#    ilan.pid_gyro(73,300,False,precise_distance = False)
 
+@timeit
+def run_6b():
 
+    ilan.pid_gyro(70,Forward_Is_True = False,precise_distance = False)
+    ilan.turn(50)
+    ilan.pid_gyro(12, 120,precise_distance = False)
+    #ilan.drive_by_seconds(100,1.5)
+    ilan.robot.drive(80, 0)
+    wait(1500)
+    ilan.robot.stop()
+
+    ilan.right_medium_motor.run_angle(200, -135)
+    ilan.pid_gyro(20, 150, False,precise_distance = False)
+    ilan.turn(-50) 
+    ilan.pid_gyro(80,300,precise_distance = False) 
+#    ilan.pid_gyro(72,300,precise_distance = False)
+#    ilan.turn(-105)
+#    ilan.pid_gyro(17,precise_distance = False)
+#    ilan.right_medium_motor.run_angle(200,-135)
+#    ilan.pid_gyro(17,Forward_Is_True = False, precise_distance = False)
+#    ilan.turn(115)
 
 
 TEXT_MENU = """Choose Run: 
@@ -220,8 +251,6 @@ def running ():
 
     while True:
 
-            
-            
         if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "1-4":
             run_1()
         elif  Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "3-6":
@@ -230,7 +259,7 @@ def running ():
         if Button.UP in ilan.ev3.buttons.pressed() and situation == "1-4":
             run_2()
         elif  Button.UP in ilan.ev3.buttons.pressed() and situation == "3-6":
-            run_6()
+            run_6b()
 
         if Button.LEFT in ilan.ev3.buttons.pressed():
             run_3()

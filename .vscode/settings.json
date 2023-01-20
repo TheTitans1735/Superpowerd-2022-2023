@@ -17,6 +17,7 @@
     "editor.fontSize": 18,
     "git.autofetch": true,
     "git.confirmSync": false,
-    "editor.suggest.preview": true
+    "editor.suggest.preview": true,
+    "python.analysis.typeCheckingMode": "off"
 
 }
