@@ -190,66 +190,125 @@ def running ():
     
     """!! One Function To Rule Them All !!"""
 
-    # ilan.gyro_reset()
-
+       
+    runs = [0,1,2,3,4,5]
+    current_run = 0
+    
     while True:
+    
+        if current_run > len(runs) - 1:
+            current_run = current_run - len(runs)
 
+        if current_run == 0:
+            ilan.write('0')
 
-        
-        try:
-            # מדפיס את טקסט הריצות על הרובוט ועל מסך המחשב
-            
-            ilan.write(TEXT_MENU)
-            
-            
-            # מחכה ללחיצת כפתור
-            while not any(ilan.ev3.buttons.pressed()):
-                wait(60)
-            
+        while current_run == 0:
+            if Button.RIGHT in ilan.ev3.buttons.pressed():
+                current_run += 1
 
-            # כפתור עליון - run_1
-            if Button.UP in ilan.ev3.buttons.pressed():
-                
-                ilan.write("run_1")
-                run_1() # הפעלת הריצה
-
-            # כפתור ימני - run_2
-            elif Button.RIGHT in ilan.ev3.buttons.pressed():
-
-                ilan.write("run_2")
-                run_2() # הפעלת הריצה
-
-
-            # כפתור תחתון - run_3
-            elif Button.DOWN in ilan.ev3.buttons.pressed():
-
-                ilan.write("run_3")
-                run_3() # הפעלת הריצה
-
-
-            # כפתור שמאלי - run_4
-            elif Button.LEFT in ilan.ev3.buttons.pressed():
-
-                ilan.write("run_4")
-                run_4() # הפעלת הריצה
-
-            # כפתור אמצעי - run_5
             elif Button.CENTER in ilan.ev3.buttons.pressed():
+                current_run += 1
+                run_1()
+                print("run 1")
 
-                ilan.write("run_5")
+        while current_run == 1:
+            if Button.RIGHT in ilan.ev3.buttons.pressed():
+                current_run += 1
+
+            elif Button.CENTER in ilan.ev3.buttons.pressed():
+                current_run += 1
+                run_2()
+                print("run 2")
+                
+        while current_run == 2:
+            if Button.RIGHT in ilan.ev3.buttons.pressed():
+                current_run += 1
+
+            elif Button.CENTER in ilan.ev3.buttons.pressed():
+                current_run += 1
+                run_3()
+                print("run 3")
+
+        while current_run == 3:
+            if Button.RIGHT in ilan.ev3.buttons.pressed():
+                current_run += 1
+                
+            elif Button.CENTER in ilan.ev3.buttons.pressed():
+                current_run += 1
+                run_4()
+                print("run 4")
+
+        while current_run == 4:
+            if Button.RIGHT in ilan.ev3.buttons.pressed():
+                current_run += 1
+
+            elif Button.CENTER in ilan.ev3.buttons.pressed():
+                current_run += 1
                 run_5()
-                 # הפעלת הראן
+                print("run 5")
+
+        while current_run == 5:
+            if Button.RIGHT in ilan.ev3.buttons.pressed():
+                current_run += 1
+
+            elif Button.CENTER in ilan.ev3.buttons.pressed():
+                current_run += 1
+                run_6()
+                print("run 6")
+#         try:
+#             # מדפיס את טקסט הריצות על הרובוט ועל מסך המחשב
+            
+#             ilan.write(TEXT_MENU)
+            
+            
+#             # מחכה ללחיצת כפתור
+#             while not any(ilan.ev3.buttons.pressed()):
+#                 wait(60)
             
 
-            # כפתור כפתור עליון וכפתור תחתון - run_6
-            elif Button.DOWN in ilan.ev3.buttons.pressed() and Button.UP in ilan.ev3.buttons.pressed():
+#             # כפתור עליון - run_1
+#             if Button.UP in ilan.ev3.buttons.pressed():
+                
+#                 ilan.write("run_1")
+#                 run_1() # הפעלת הריצה
 
-                ilan.write("run_6")
-                run_6() # הפעלת הראן
+#             # כפתור ימני - run_2
+#             elif Button.RIGHT in ilan.ev3.buttons.pressed():
+
+#                 ilan.write("run_2")
+#                 run_2() # הפעלת הריצה
 
 
-        except Exception as ex:
-            print("Error: {}".format(ex))
-            wait(2500)
+#             # כפתור תחתון - run_3
+#             elif Button.DOWN in ilan.ev3.buttons.pressed():
 
-running()
+#                 ilan.write("run_3")
+#                 run_3() # הפעלת הריצה
+
+
+#             # כפתור שמאלי - run_4
+#             elif Button.LEFT in ilan.ev3.buttons.pressed():
+
+#                 ilan.write("run_4")
+#                 run_4() # הפעלת הריצה
+
+#             # כפתור אמצעי - run_5
+#             elif Button.CENTER in ilan.ev3.buttons.pressed():
+
+#                 ilan.write("run_5")
+#                 run_5()
+#                  # הפעלת הראן
+            
+
+#             # כפתור כפתור עליון וכפתור תחתון - run_6
+#             elif Button.DOWN in ilan.ev3.buttons.pressed() and Button.UP in ilan.ev3.buttons.pressed():
+
+#                 ilan.write("run_6")
+#                 run_6() # הפעלת הראן
+
+
+#         except Exception as ex:
+#             print("Error: {}".format(ex))
+#             wait(2500)
+
+# running()

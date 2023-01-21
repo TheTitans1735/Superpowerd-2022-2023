@@ -66,10 +66,11 @@ def run_2():
     ilan.speed_formula(49,400,False)
 
     # ביצוע משימה M14
-
+    #2023-01-21 rtm Add wait for button so we can lower the alignment tool manually
+    ilan.wait_for_button("Before Turn",True)
     ilan.turn(-50,150)
     ilan.speed_formula(45,300)
-    ilan.pid_gyro(2,200)
+    ilan.pid_gyro(2,100)
 
     # חזרה הביתה
 
@@ -165,13 +166,16 @@ def run_5():
 
     #נסיעה לM03
 
-    ilan.pid_gyro(44,150,precise_distance = False)
+    ilan.pid_gyro(43,150,precise_distance = False)
     ilan.turn(-30)
     ilan.pid_gyro(22,170,precise_distance = False)
 
     #שפיכת יחידות האנרגיה למשימה 
 
-    ilan.pid_gyro(7,270,precise_distance = False)
+    ilan.pid_gyro(8,270,precise_distance = False)
+    ilan.wait_for_button("sdd", True)
+    # wait(500)
+    
 
     #לקיחת יחידת האנרגיה וחזרה הביתה
 
@@ -183,6 +187,8 @@ def run_5():
 
 @timeit
 def run_6a():
+
+    """הצבה קדימה"""
 
     ilan.speed_formula(85, Kp=3.1, Ki=0.03)
     ilan.pid_gyro_until_color_in_one_sensor(Ts = 100)
@@ -210,15 +216,20 @@ def run_6a():
 @timeit
 def run_6b():
 
+    """הצבה אחורה"""
+
     ilan.pid_gyro(70,Forward_Is_True = False,precise_distance = False)
     ilan.turn(50)
     ilan.pid_gyro(12, 120,precise_distance = False)
     #ilan.drive_by_seconds(100,1.5)
     ilan.robot.drive(80, 0)
-    wait(1500)
+    wait(1000)
+    ilan.robot.drive(55, 0)
+    wait(1400)
     ilan.robot.stop()
 
-    ilan.right_medium_motor.run_angle(200, -135)
+    ilan.right_medium_motor.run_angle(200, -140)
+    ilan.right_medium_motor.run_angle(150, 140, wait=False)
     ilan.pid_gyro(20, 150, False,precise_distance = False)
     ilan.turn(-50) 
     ilan.pid_gyro(80,300,precise_distance = False) 
@@ -229,6 +240,20 @@ def run_6b():
 #    ilan.pid_gyro(17,Forward_Is_True = False, precise_distance = False)
 #    ilan.turn(115)
 
+def run_6c():
+
+        #11/1 איה ורתם עדכנו לא לגעת עד לבנית סרגל שיגור
+    """פנאומטי"""
+    ilan.beep()
+    ilan.speed_formula(65,300)
+    #ilan.pid_gyro(20,200,True,precise_distance = True)
+    
+    ilan.turn(75)
+    
+    ilan.pid_gyro(11,90,False,precise_distance = True)
+    ilan.wait_for_button()
+    ilan.turn(-10)
+    ilan.pid_gyro(20,200,precise_distance = False)
 
 TEXT_MENU = """Choose Run: 
   < - Left run 

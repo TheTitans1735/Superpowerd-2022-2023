@@ -934,7 +934,7 @@ class Robot:
 
     ##### WAIT FOR BUTTON #####
 
-    def wait_for_button(self, text, debug = True):
+    def wait_for_button(self, text = "TEST", debug = True):
         """
         מחכה לכפתור וכותב טקסט - Debugging מנגנון
         """
