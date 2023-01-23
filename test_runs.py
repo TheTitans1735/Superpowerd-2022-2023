@@ -17,7 +17,7 @@ def timeit(func):
     return timeit_wrapper
 
 
-ilan = Robot()
+ilan = Robot() 
 
 ##### Center Run #####
 
@@ -173,7 +173,7 @@ def run_5():
     #שפיכת יחידות האנרגיה למשימה 
 
     ilan.pid_gyro(8,270,precise_distance = False)
-    ilan.wait_for_button("sdd", True)
+    #ilan.wait_for_button("sdd", True)
     # wait(500)
     
 
@@ -270,7 +270,6 @@ def running ():
     
     """!! One Function To Rule Them All !!"""
 
-    ilan.say("Started")
     situation = "1-4"
     ilan.write("\t2\n3   v   1\n\t4")
 
