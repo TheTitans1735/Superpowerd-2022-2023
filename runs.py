@@ -30,20 +30,20 @@ def run_1():
     #  ביצוע משימה M15
     # 2023-01-18 rtm changed the run - added slide in front of arm. More accurate - so reduced 4->3 times push
 
-    ilan.pid_gyro(14,precise_distance = False)
+    ilan.pid_gyro(16,precise_distance = False)
     ilan.turn(-45)
     ilan.speed_formula(52,500)
     
     # התיישרות על משימה M14
 
     ilan.turn(90)
-    ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
-    ilan.pid_gyro(16,precise_distance = False)
+    # ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
+    ilan.pid_gyro(12,precise_distance = False)
 
     #  ביצוע משימה M15
      
     for i in range (4):
-        ilan.pid_gyro(12 + i,200,precise_distance = False)
+        ilan.pid_gyro(14 + i,200,precise_distance = False)
         wait(500)
         ilan.pid_gyro(12,200,Forward_Is_True = False,precise_distance = False)
 
@@ -62,7 +62,7 @@ def run_2():
 
     #  ביצוע משימה M08 
 
-    ilan.speed_formula(42 ,400)
+    ilan.speed_formula(44 ,400)
     ilan.speed_formula(49,400,False)
 
     # ביצוע משימה M14
@@ -99,6 +99,7 @@ def run_3():
     
     # נסיעה לבית האדום ואסיפת יחידת אנרגיה
 
+    ilan.right_medium_motor.run_angle(350,-10,wait = False)
     ilan.pid_gyro(90,400,precise_distance = False)
 
 
@@ -168,9 +169,9 @@ def run_5():
 
     #נסיעה לM03
 
-    ilan.pid_gyro(43,150,precise_distance = False)
+    ilan.pid_gyro(42,150,precise_distance = False)
     ilan.turn(-30)
-    ilan.pid_gyro(22,170,precise_distance = False)
+    ilan.pid_gyro(22,200,precise_distance = False)
 
     #שפיכת יחידות האנרגיה למשימה 
 
@@ -181,9 +182,9 @@ def run_5():
 
     #לקיחת יחידת האנרגיה וחזרה הביתה
 
-    ilan.pid_gyro(30,300,False,precise_distance = False)
+    ilan.speed_formula(30,400,False)
     ilan.turn(30)
-    ilan.pid_gyro(40,300,False,precise_distance = False)
+    ilan.pid_gyro(47,300,False,precise_distance = False)
 
 
 
