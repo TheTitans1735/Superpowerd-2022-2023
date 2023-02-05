@@ -5,8 +5,7 @@ import csv
 
 from pybricks.ev3devices import ColorSensor, GyroSensor, Motor
 from pybricks.hubs import EV3Brick
-from pybricks.media import ev3dev
-from pybricks.parameters import Button, Color, Direction, Port, Stop
+from pybricks.parameters import Color, Direction, Port
 from pybricks.robotics import DriveBase
 from pybricks.tools import DataLog, StopWatch, wait
 
@@ -44,61 +43,32 @@ class Robot:
         self.left_medium_motor = Motor(Port.B) 
         self.right_medium_motor = Motor(Port.A) 
 
-        
-        
 
 
-    ##### RE
+        ##### Driving By Time #####
 
 
 
     def drive_by_seconds(self, speed, time_seconds):
-        import time
-        self.gyro_sensor.reset_angle(0)
-        direction_indicator=1
-        if (speed < 0):
-            direction_indicator = -1 #אם נוסעים אחורה תתקן גיירו לצד השני 
-        start = time.time()
-        while ((time.time() - start) < time_seconds):
-            print("gyro: " + str(self.gyro_sensor.angle()))
-            self.robot.drive(speed, self.gyro_sensor.angle() * direction_indicator)
-        self.robot.stop()
+
+        # בדיקת זמן סיום הנסיעה
+
+        end_time = time.time() + time_seconds
+
+        #הגדרת תנאי עצירה
+
+        stop_cond = lambda: time.time() < end_time
+
+        #נסיעה עם pid gyro ותנאי העצירה 
+
+        self.pid_gyro(100, speed, alternative_cond=stop_cond, precise_distance = False)
+        
+
+
+        ##### Acceleration And Deceleration #####
 
 
 
-    ##### UPDATE WALL'S CURRENT VALUES #####
-
-    def update_angles_from_file(self):
-        """
-        עדכון ערך הפוזיציה הנוכחית של הקיר לפי מה שנכתב בקובץ הטקסט
-        """
-
-        # with open('wall_values.txt'x  ) as f:
-        #     content = f.readline()
-
-        #     x_value, y_value = content.split(",")
-        #     wait(50)
-
-        #     self.wall_x_motor.reset_angle(int(x_value))
-        #     self.wall_y_motor.reset_angle(int(y_value))
-
-        pass
-
-
-
-    ##### PUSH WALL'S CURRENT VALUES #####pass
-    
-    
-
-    ##### MOVE WALL TO POINT #####
-
-    
-
-    ##### PID Gyro #####
-
-
-    # def drive_run_time(speed=150, time):
-    #     datetime.time. 
     def speed_formula(self, Td, Vmax = 300, Forward_Is_True = True, Kp = 3.09, Ki= 0.027, Kd = 3.02, alternative_cond = lambda : True): 
         """
         PID Gyro נסיעה ישרה באמצעות מנגנון
@@ -174,47 +144,43 @@ class Robot:
         self.right_motor.hold()
         print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
 
-
-    def rst_to_angle_zero(self):
-        """מטרת פונקציה זו היא שהרובוט יתקן את עצמו בעזרת סיבוב לזווית 0"""
-        while(self.gyro_sensor.angle() < 0):
-            self.left_motor.run(30)
-            self.right_motor.run(-30)
-        while(self.gyro_sensor.angle() > 0):
-            self.left_motor.run(-30)
-            self.right_motor.run(30)
-        self.robot.stop()
-
         
+
+        ##### Alignment On a Line #####
+
+
+
     def align_on_black_white(self,right_first):
+
         """מטרת פונקציה זו היא שהרובוט יתקן את עצמו בעצירה על קו"""
+
         speed = 50
-        if right_first == True:
-            while(self.color_sensor_right.color() == Color.BLACK):
+        if right_first == True:     # התיישרות על קו במקרה שהחיישן הימני הגיע קודם
+            while(self.color_sensor_right.color() == Color.BLACK):  # כל עוד החיישן הימני מזהה שחור המנוע הימני זז אחורה
+                self.check_forced_exit()
                 self.right_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.right_motor.hold()
 
 
-            while(self.color_sensor_left.color() == Color.BLACK):
+            while(self.color_sensor_left.color() == Color.BLACK): # כל עוד החיישן השמאלי מזהה שחור המנוע השמאלי זז אחורה
+                self.check_forced_exit()
                 self.left_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.left_motor.hold()
 
-        else:
-            while(self.color_sensor_left.color() == Color.BLACK):
+        else:   # התיישרות על קו במקרה שהחיישן השמאלי הגיע קודם
+            while(self.color_sensor_left.color() == Color.BLACK):   #כל עוד החיישן השמאלי מזה שחור המנוע השמאלי זז אחורה    
+                self.check_forced_exit()
                 self.left_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.left_motor.hold()
 
 
-            while(self.color_sensor_right.color() == Color.BLACK):
+            while(self.color_sensor_right.color() == Color.BLACK):  #כל עוד החיישן הימני מזהה שחור המנוע הימני זז אחורה
+                self.check_forced_exit()
                 self.right_motor.run(-1 * speed)
                 self.write("L: " + str(self.color_sensor_left.color()) + " R: " + str(self.color_sensor_right.color()))
-                # self.write("L: " + str(self.color_sensor_left.reflection()) + " R: " + str(self.color_sensor_right.reflection()))
             self.right_motor.hold()
 
         self.robot.stop()
@@ -285,17 +251,6 @@ class Robot:
             
         
         # עצור את הרובוט
-        print("hi")
-        # if Forward_Is_True:
-        #     self.left_motor.stop()
-        #     self.right_motor.stop()
-        #     self.robot.stop()
-            
-        # else:
-        #     self.left_motor.hold()
-        #     self.right_motor.hold()
-        #     self.robot.stop()
-            
         self.robot.stop()
         
         self.left_motor.brake()
@@ -325,79 +280,30 @@ class Robot:
     ##### PID GYRO UNTIL COLOR #####
 
     def  pid_gyro_until_color_in_one_sensor(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02,):
+
+        #הגדרת זיהוי שחור באחד מהחיישנים כתנאי עצירה
+
         stop_if_one_black = lambda: self.color_sensor_right.color() != stop_color and self.color_sensor_left.color() != stop_color
+
+        #נסיעה בעזרת pid gyro תוך כדי שימוש בתנאי העצירה
+
         self.pid_gyro(100, alternative_cond=stop_if_one_black,precise_distance = False)
 
     def pid_gyro_until_color_in_two_sensor(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
+
+        #הגדרת זיהוי שחור בשני החיישנים כתנאי עצירה
+
         stop_if_both_black = lambda: self.color_sensor_right.color() != stop_color or self.color_sensor_left.color() != stop_color
+
+        #נסיעה בעזרת pid gyro תוך כדי שימוש בתנאי העצירה
+
         self.pid_gyro(100, alternative_cond=stop_if_both_black,precise_distance = False)
 
-    def pid_gyro_until_color1(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
-        """
-        PID Gyro נסיעה ישרה עד זיהוי קו באמצעות
-        """
-        
-        direction_indicator = 1
-        speed_indicator = -1       #משתנה שנועד כדי לכפול אותו במהירות ובתיקון השגיאה כדי שנוכל לנסוע אחורה במידת הצורך  
 
-        if Forward_Is_True:             #אם נוסעים קדימה - תכפול באחד. אחורה - תכפול במינוס אחד
-            direction_indicator = -1
-            speed_indicator = 1   
 
-        # reset
-        self.robot.reset() 
-        self.gyro_sensor.reset_angle(0)
-
-        # Td = 1000 # target distance
-        # Ts = 150 # target speed of robot in mm/s
-
-        # Kp = 3 #  the Constant 'K' for the 'p' proportional controller
-        # Ki = 0.025 #  the Constant 'K' for the 'i' integral term
-        # Kd = 3 #  the Constant 'K' for the 'd' derivative term
-
-        # initialize
-        integral = 0 
-        derivative = 0 
-        lastError = 0 
-
-        while self.color_sensor_right.color() != stop_color or self.color_sensor_left.color() != stop_color:
-
-            # P - Proportional
-            # תיקון השגיאה המיידית
-            # הגדר את השגיאה כזווית הנוכחית של הג'יירו
-            error = self.gyro_sensor.angle() 
-
-            print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
-
-            # I - Integral
-            # תיקון השגיאה המצטברת
-            # אם ישנה שגיאה, הוסף אותה לאינטגרל
-            if (error == 0):
-                integral = 0
-
-            else:
-                integral = integral + error    
-
-            # D - Derivative
-            # תיקון השגיאה העתידית
-            # הגדר את הדריבטיב כשגיאה הנוכחית - השגיאה האחרונה
-            derivative = error - lastError  
-            
-            # הגדרת זווית הפנייה הדרושה בנסיעה
-            # הכפלת כל חלק במשקל התיקון שלו
-            correction = (Kp * (error) + Ki * (integral) + Kd * derivative) * -1
-
-            # נסיעה לפי המהירות וזווית הנסיעה של התיקון
-            self.robot.drive(Ts * speed_indicator , correction * direction_indicator * -1)
-
-            # הגדר את השגיאה האחרונה כשגיאה הנוכחית
-            lastError = error  
-        
-        # עצור את הרובוט
-        self.robot.stop()
-        wait(2000)
-        print(self.gyro_sensor.angle())
     ##### RUN STRAIGHT ####
+
+
 
     def run_straight (self, distance):
         """
@@ -505,90 +411,7 @@ class Robot:
 
     ##### CREATE LOG FILE #####
 
-    def create_log_file(self):
-        """
-        יצירת קובץ למדידת ערכי פיד אופטימליים
-        """
-        
-        log_file_name = time.strftime("%Y_%m_%d_%H_%M_%S")
-
-        # print file's name
-        print(log_file_name)
-
-        # Create the file to write in with following catagories:
-        # Distance | Reflection | Error | Proportional Gain | Integral Gain | Derivative Gain | Integral | Derivative |
-        # Turn Rate | Gyro | Speed | Side of the Line | Gyro Offset | Time From Start |
-
-        self.data = DataLog("Distance", "Reflection", "Error", "PROPORTIONAL_GAIN", "INTEGRAL_GAIN", "DERIVATIVE_GAIN", "integral", "derivative", "turn_rate", "gyro", "speed", "white_is_right","Gyro_Offset","MS_From_Start",name=log_file_name,timestamp=False)
     
-
-
-    ##### WRITE TO LOG FILE #####
-
-    def write_to_log_file(self, message):
-        """
-        כתיבה לתוך הקובץ שנוצר בפונקציה הקודמת
-        """
-
-        for a in message:
-            self.data.log(a)
-
-
-
-    ##### LEARN THE BEST VALUES FOR PID FOLLOW LINE #####
-
-    def learn_pid_line_values_2022_03_11 (self, distance = 150, speed = 100, value_checking = "Kp", kp = 1.3, ki = 0.01, kd = 0.07, num_of_loops = 20):
-        """
-        פונקציה ללמידת ערכי הפיד האופטימליים למעקב אחרי קו     
-        """
-
-        # שימוש בפונקציית יצירת הקובץ
-        self.create_log_file()
-
-        # הגדרת הערך ההתחלתי, הסופי והכמות שרוצים להגדיל אותו בכל סיבוב
-        loop_start_value = 0.01
-        loop_end_value = 0.03
-        loop_step_size = 0.002
-
-        loop_current_value = loop_start_value
-
-        # הכנסת הערכים שהוגדרו אל המשתנה אותו אנו רוצים לבדוק
-        if value_checking == "Kp" or value_checking == "kp":
-            kp = loop_start_value
-
-        elif value_checking == "Ki" or value_checking == "ki":
-            ki = loop_start_value
-
-        elif value_checking == "Kd" or value_checking == "kd":
-            kd = loop_start_value
-
-
-        ## הלולאה ##
-        while loop_current_value < loop_end_value:
-            
-            # איפוס חיישן הג'יירו
-            self.gyro_sensor.reset_angle(0)
-
-            # הפעלת הפונקציה וכתיבת התוצאות בתוך הקובץ שנוצר
-            follow_line_results = self.pid_follow_line(distance, speed, self.color_sensor_right, Kp = kp, Ki = ki, Kd = kd)
-            self.write_to_log_file(follow_line_results)
-            
-            # הגדלת הערכים
-            if value_checking == "Kp" or value_checking == "kp":
-                kp = kp + loop_step_size
-
-            elif value_checking == "Ki" or value_checking == "ki":
-                ki = ki + loop_step_size
-
-            elif value_checking == "Kd" or value_checking == "kd":
-                kd = kd + loop_step_size
-
-            loop_current_value += loop_step_size
-
-            # המתנה שהמריץ ייקח את הרובוט חזרה אל תחילת הקו
-            wait(5000)
-
-
 
     ##### PID FOLLOW RIGHT LINE UNTIL LEFT DETECT COLOR #####
 
@@ -702,20 +525,9 @@ class Robot:
 
 
 
-    ##### RUN STRAIGHT ####
-
-    def run_straight (self, distance):
-        self.robot.straight(distance * 10)
-
-    # def detect_line_on_turn(self,left_sensor = True):
-    #     if left_sensor == True :
-    #         SensorColor = self.color_sensor_left.color()
-    #     while SensorColor != Color.BLACK :
-    #         self.turn_to_threshold() 
-
-
-
     ##### TURN #####
+
+
 
     def turn (self, angle, speed=100):
         # איפוס חיישן הג'יירו
@@ -891,6 +703,8 @@ class Robot:
         
     ##### CHECK GYRO #####
 
+
+
     def check_gyro(self):
         """
         פונקציה לבדיקה האם הגיירו מאופס, אם לא משמיע אזעקה עד שהוא מאופס.
@@ -928,11 +742,18 @@ class Robot:
 
             self.write("Forced Exit")
             print("!!!!!!!!!!!!!!!!!!!! FORCED EXIT !!!!!!!!!!!!!!!!!!!!!!!!")
+            self.beep()
+            self.left_medium_motor.stop()
+            self.right_medium_motor.stop()
+            self.robot.stop()
+            
             raise Exception("Forced Exit")
         
-
+        
 
     ##### WAIT FOR BUTTON #####
+
+
 
     def wait_for_button(self, text = "TEST", debug = True):
         """
@@ -987,6 +808,8 @@ class Robot:
 
     ##### SAY TEXT #####
 
+
+
     def say(self, text, voice='m1', volume = 100):
         """"
         אילן אומר את הטקסט
@@ -1004,8 +827,99 @@ class Robot:
         
 
 
+    ##### Unused Function ##### 
+
+
+
+    def create_log_file(self):
+        """
+        יצירת קובץ למדידת ערכי פיד אופטימליים
+        """
+        
+        log_file_name = time.strftime("%Y_%m_%d_%H_%M_%S")
+
+        # print file's name
+        print(log_file_name)
+
+        # Create the file to write in with following catagories:
+        # Distance | Reflection | Error | Proportional Gain | Integral Gain | Derivative Gain | Integral | Derivative |
+        # Turn Rate | Gyro | Speed | Side of the Line | Gyro Offset | Time From Start |
+
+        self.data = DataLog("Distance", "Reflection", "Error", "PROPORTIONAL_GAIN", "INTEGRAL_GAIN", "DERIVATIVE_GAIN", "integral", "derivative", "turn_rate", "gyro", "speed", "white_is_right","Gyro_Offset","MS_From_Start",name=log_file_name,timestamp=False)
+    
+
+
+    ##### WRITE TO LOG FILE #####
+
+    def write_to_log_file(self, message):
+        """
+        כתיבה לתוך הקובץ שנוצר בפונקציה הקודמת
+        """
+
+        for a in message:
+            self.data.log(a)
+
+
+
+    ##### LEARN THE BEST VALUES FOR PID FOLLOW LINE #####
+
+    def learn_pid_line_values_2022_03_11 (self, distance = 150, speed = 100, value_checking = "Kp", kp = 1.3, ki = 0.01, kd = 0.07, num_of_loops = 20):
+        """
+        פונקציה ללמידת ערכי הפיד האופטימליים למעקב אחרי קו     
+        """
+
+        # שימוש בפונקציית יצירת הקובץ
+        self.create_log_file()
+
+        # הגדרת הערך ההתחלתי, הסופי והכמות שרוצים להגדיל אותו בכל סיבוב
+        loop_start_value = 0.01
+        loop_end_value = 0.03
+        loop_step_size = 0.002
+
+        loop_current_value = loop_start_value
+
+        # הכנסת הערכים שהוגדרו אל המשתנה אותו אנו רוצים לבדוק
+        if value_checking == "Kp" or value_checking == "kp":
+            kp = loop_start_value
+
+        elif value_checking == "Ki" or value_checking == "ki":
+            ki = loop_start_value
+
+        elif value_checking == "Kd" or value_checking == "kd":
+            kd = loop_start_value
+
+
+        ## הלולאה ##
+        while loop_current_value < loop_end_value:
+            
+            # איפוס חיישן הג'יירו
+            self.gyro_sensor.reset_angle(0)
+
+            # הפעלת הפונקציה וכתיבת התוצאות בתוך הקובץ שנוצר
+            follow_line_results = self.pid_follow_line(distance, speed, self.color_sensor_right, Kp = kp, Ki = ki, Kd = kd)
+            self.write_to_log_file(follow_line_results)
+            
+            # הגדלת הערכים
+            if value_checking == "Kp" or value_checking == "kp":
+                kp = kp + loop_step_size
+
+            elif value_checking == "Ki" or value_checking == "ki":
+                ki = ki + loop_step_size
+
+            elif value_checking == "Kd" or value_checking == "kd":
+                kd = kd + loop_step_size
+
+            loop_current_value += loop_step_size
+
+            # המתנה שהמריץ ייקח את הרובוט חזרה אל תחילת הקו
+            wait(5000)
+
+
+
+
     def stop_on_line(self, color):
         while ColorSensor.reflection() != color:
+            self.check_forced_exit()
             wait(1)            
         self.robot.stop()
 
@@ -1025,14 +939,100 @@ class Robot:
         wait(400)
         self.ev3.light.off()
 
+    def update_angles_from_file(self):
+        """
+        עדכון ערך הפוזיציה הנוכחית של הקיר לפי מה שנכתב בקובץ הטקסט
+        """
+
+        # with open('wall_values.txt'x  ) as f:
+        #     content = f.readline()
+
+        #     x_value, y_value = content.split(",")
+        #     wait(50)
+
+        #     self.wall_x_motor.reset_angle(int(x_value))
+        #     self.wall_y_motor.reset_angle(int(y_value))
+
+        
+    def rst_to_angle_zero(self):
+        """מטרת פונקציה זו היא שהרובוט יתקן את עצמו בעזרת סיבוב לזווית 0"""
+        while(self.gyro_sensor.angle() < 0):
+            self.left_motor.run(30)
+            self.right_motor.run(-30)
+        while(self.gyro_sensor.angle() > 0):
+            self.left_motor.run(-30)
+            self.right_motor.run(30)
+        self.robot.stop()
 
 
+def pid_gyro_until_color1(self, stop_color = Color.BLACK, Ts = 150, Forward_Is_True = True, Kp = 3.06, Ki= 0.027, Kd = 3.02):
+        """
+        PID Gyro נסיעה ישרה עד זיהוי קו באמצעות
+        """
+        
+        direction_indicator = 1
+        speed_indicator = -1       #משתנה שנועד כדי לכפול אותו במהירות ובתיקון השגיאה כדי שנוכל לנסוע אחורה במידת הצורך  
+
+        if Forward_Is_True:             #אם נוסעים קדימה - תכפול באחד. אחורה - תכפול במינוס אחד
+            direction_indicator = -1
+            speed_indicator = 1   
+
+        # reset
+        self.robot.reset() 
+        self.gyro_sensor.reset_angle(0)
+
+        # Td = 1000 # target distance
+        # Ts = 150 # target speed of robot in mm/s
+
+        # Kp = 3 #  the Constant 'K' for the 'p' proportional controller
+        # Ki = 0.025 #  the Constant 'K' for the 'i' integral term
+        # Kd = 3 #  the Constant 'K' for the 'd' derivative term
+
+        # initialize
+        integral = 0 
+        derivative = 0 
+        lastError = 0 
+
+        while self.color_sensor_right.color() != stop_color or self.color_sensor_left.color() != stop_color:
+            self.check_forced_exit()
+
+            # P - Proportional
+            # תיקון השגיאה המיידית
+            # הגדר את השגיאה כזווית הנוכחית של הג'יירו
+            error = self.gyro_sensor.angle() 
+
+            print("distance: " + str(self.robot.distance()) + " gyro: " + str(self.gyro_sensor.angle()))
+
+            # I - Integral
+            # תיקון השגיאה המצטברת
+            # אם ישנה שגיאה, הוסף אותה לאינטגרל
+            if (error == 0):
+                integral = 0
+
+            else:
+                integral = integral + error    
+
+            # D - Derivative
+            # תיקון השגיאה העתידית
+            # הגדר את הדריבטיב כשגיאה הנוכחית - השגיאה האחרונה
+            derivative = error - lastError  
+            
+            # הגדרת זווית הפנייה הדרושה בנסיעה
+            # הכפלת כל חלק במשקל התיקון שלו
+            correction = (Kp * (error) + Ki * (integral) + Kd * derivative) * -1
+
+            # נסיעה לפי המהירות וזווית הנסיעה של התיקון
+            self.robot.drive(Ts * speed_indicator , correction * direction_indicator * -1)
+
+            # הגדר את השגיאה האחרונה כשגיאה הנוכחית
+            lastError = error  
+        
+        # עצור את הרובוט
+        self.robot.stop()
+        wait(2000)
+        print(self.gyro_sensor.angle())
 ##### The End :) #####
 if __name__ == '__main__':
     robot = Robot()
     debug = True
-    #robot.pid_gyro(40)
-    #print(GyroSensor.angle())
-    # robot.wait_for_button("Press to turn 90 right", debug)
-    # robot.turn(90, 50)
     

@@ -1,6 +1,8 @@
 #!/usr/bin/env pybricks-micropython
 
-from robot import *
+from robot import Robot
+from pybricks.parameters import Button, Color, Stop
+from pybricks.tools import StopWatch, wait
 import time
 from functools import wraps
 
@@ -25,33 +27,38 @@ ilan = Robot()
 @timeit
 def run_1():
 
-    """מבצע את משימות M07,M15"""
+        """מבצע את משימות M07,M15"""
 
-    #  ביצוע משימה M15
-    # 2023-01-18 rtm changed the run - added slide in front of arm. More accurate - so reduced 4->3 times push
+        #  ביצוע משימה M15
+        # 2023-01-18 rtm changed the run - added slide in front of arm. More accurate - so reduced 4->3 times push
 
-    ilan.pid_gyro(16,precise_distance = False)
-    ilan.turn(-45)
-    ilan.speed_formula(52,500)
-    
-    # התיישרות על משימה M14
+        ilan.pid_gyro(16,precise_distance = False)
+        ilan.turn(-45)
+        ilan.speed_formula(52,500)
+            
+        # התיישרות על משימה M14
 
-    ilan.turn(90)
-    # ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
-    ilan.pid_gyro(12,precise_distance = False)
+        ilan.turn(90)
 
-    #  ביצוע משימה M15
-     
-    for i in range (4):
-        ilan.pid_gyro(14 + i,200,precise_distance = False)
-        wait(500)
-        ilan.pid_gyro(12,200,Forward_Is_True = False,precise_distance = False)
+        # ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
 
-    # חזרה הביתה
+        ilan.pid_gyro(10,precise_distance = False)
 
-    ilan.pid_gyro(5,400,Forward_Is_True =  False,precise_distance = False)
-    ilan.turn(90,200)
-    ilan.pid_gyro(58,400,precise_distance = False)
+        ilan.drive_by_seconds(200, 2)
+        wait(300)
+        ilan.pid_gyro(11.95,200,Forward_Is_True = False,precise_distance = False)
+
+        #  ביצוע משימה M15
+        for i in range (3):
+            ilan.pid_gyro(11.95 + i,200,precise_distance = False)
+            wait(700)
+            ilan.pid_gyro(11.95,200,Forward_Is_True = False,precise_distance = False)
+
+        # חזרה הביתה
+
+        ilan.pid_gyro(5,400,Forward_Is_True =  False,precise_distance = False)
+        ilan.turn(90,200)
+        ilan.pid_gyro(58,400,precise_distance = False)
 
 
 
@@ -62,14 +69,18 @@ def run_2():
 
     #  ביצוע משימה M08 
 
-    ilan.speed_formula(44 ,400)
-    ilan.speed_formula(49,400,False)
+    ilan.speed_formula(47 ,400)
+    ilan.speed_formula(51,500,False)
 
     # ביצוע משימה M14
     #2023-01-21 rtm Add wait for button so we can lower the alignment tool manually
+    ilan.beep()
     ilan.wait_for_button("Before Turn",True)
-    ilan.turn(-50,150)
-    ilan.speed_formula(45,300)
+    ilan.beep()
+    ilan.turn(-52,200)
+    ilan.speed_formula(48,400)
+    # ilan.run_seconds(0.5,100)
+        
     ilan.pid_gyro(2,100)
 
     # חזרה הביתה
@@ -100,7 +111,7 @@ def run_3():
     # נסיעה לבית האדום ואסיפת יחידת אנרגיה
 
     ilan.right_medium_motor.run_angle(350,-10,wait = False)
-    ilan.pid_gyro(90,400,precise_distance = False)
+    ilan.pid_gyro(90,500,precise_distance = False)
 
 
 
@@ -136,11 +147,12 @@ def run_4():
     ilan.wait_for_button("50 - drive 4.5 cm", debug)
     ilan.pid_gyro(4.5,precise_distance = False)
     ilan.beep()
-    ilan.wait_for_button("60 - turn", debug)
+   # ilan.wait_for_button("60 - turn", debug)
     ilan.turn(-57)
     ilan.right_medium_motor.run_angle(1500,80,wait = False)
     ilan.pid_gyro(17,precise_distance = False)
-    ilan.right_medium_motor.run_angle(-150,90)
+    # ilan.right_medium_motor.run_angle(-200,90)
+    ilan.right_medium_motor.run_until_stalled(-200, Stop.HOLD, duty_limit=60)
 
     # נסיעה על קו
 
@@ -151,7 +163,7 @@ def run_4():
     # אסיפת יחידת האנרגיה האחרונה ממשימה M04
 
     ilan.turn(65)
-    ilan.speed_formula(30,300,False)
+    ilan.speed_formula(30,250,False)
 
     # חזרה הביתה
 
@@ -190,6 +202,8 @@ def run_5():
 
 @timeit
 def run_6():
+
+    
 
     """ביצוע M11 ו M12"""
 
@@ -231,7 +245,9 @@ TEXT_MENU = """Choose Run:
 
 ##### פונקציה להפעלת הריצות באמצעות כפתורי הרובוט #####
 def running ():
+
     
+
     """!! One Function To Rule Them All !!"""
 
     ilan.beep()
@@ -253,38 +269,46 @@ def running ():
 
     while True:
         
-        if (Button.RIGHT in ilan.ev3.buttons.pressed()) or (Button.UP in ilan.ev3.buttons.pressed()):
-            current_run += 1
-
-            if current_run >= len(Runs):
-                current_run = 0
-                
-            ilan.write(Runs[current_run][0])
-
-            wait(300)
-
-        if (Button.LEFT in ilan.ev3.buttons.pressed()) or (Button.DOWN in ilan.ev3.buttons.pressed()):
-            current_run -= 1
-
-            if current_run < 0:
-                current_run = len(Runs) - 1
+        try:
         
-            ilan.write(Runs[current_run][0])
+
+            if (Button.UP in ilan.ev3.buttons.pressed()):
+                current_run += 1
+
+                if current_run >= len(Runs):
+                    current_run = 0
+                    
+                ilan.write(Runs[current_run][0])
+
+                wait(300)
+
+            if (Button.DOWN in ilan.ev3.buttons.pressed()):
+                current_run -= 1
+
+                if current_run < 0:
+                    current_run = len(Runs) - 1
             
-            wait(300)
+                ilan.write(Runs[current_run][0])
+                
+                wait(300)
 
-        if Button.CENTER in ilan.ev3.buttons.pressed():
+            if Button.CENTER in ilan.ev3.buttons.pressed():
 
-            if current_run == 0:
-                elsapsed_time.reset()
+                if current_run == 0:
+                    elsapsed_time.reset()
 
-            Runs[current_run][1]()
-        
-            current_run += 1
+                Runs[current_run][1]()
+            
+                current_run += 1
 
-            if current_run >= len(Runs):
-                current_run = 0
+                if current_run >= len(Runs):
+                    current_run = 0
 
-            ilan.write("Elapsed: {} s \n{}".format(round(elsapsed_time.time()/1000.0, 1), Runs[current_run][0]))
+                ilan.write("Elapsed: {} s \n{}".format(round(elsapsed_time.time()/1000.0, 1), Runs[current_run][0]))
+        except Exception as EX :
+            print(str(EX))
+            wait(1500)
+            
+            
 
 running()
