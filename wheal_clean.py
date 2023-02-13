@@ -14,4 +14,4 @@ def Backwards():
 def anoyying():
     ilan.check_gyro()
 
-    anoyying()
+forwards()

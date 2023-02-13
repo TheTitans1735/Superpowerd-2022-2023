@@ -40,17 +40,11 @@ def run_1():
 
         ilan.turn(90)
 
-        # ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
-
         ilan.pid_gyro(10,precise_distance = False)
 
-        ilan.drive_by_seconds(200, 2)
-        wait(300)
-        ilan.pid_gyro(11.95,200,Forward_Is_True = False,precise_distance = False)
-
         #  ביצוע משימה M15
-        for i in range (3):
-            ilan.pid_gyro(11.95 + i,200,precise_distance = False)
+        for i in range (4):
+            ilan.drive_by_seconds(200, 2)
             wait(700)
             ilan.pid_gyro(11.95,200,Forward_Is_True = False,precise_distance = False)
 
@@ -103,14 +97,13 @@ def run_3():
     # הרמת המחסום האדום
 
     ilan.left_medium_motor.run_angle(400,-100)
-
+    #rotem 2023-02-05 added run time instead of run angle
     # שחרור יחידות האנרגיה 
-
-    ilan.right_medium_motor.run_angle(350,110)
-    
+    ilan.right_medium_motor.run_angle(350,100)
+                              
     # נסיעה לבית האדום ואסיפת יחידת אנרגיה
 
-    ilan.right_medium_motor.run_angle(350,-10,wait = False)
+    #ilan.right_medium_motor.run_angle(350,-10,wait = False)
     ilan.pid_gyro(90,500,precise_distance = False)
 
 
@@ -163,6 +156,8 @@ def run_4():
     # אסיפת יחידת האנרגיה האחרונה ממשימה M04
 
     ilan.turn(65)
+    ilan.wait_for_button()
+
     ilan.speed_formula(30,250,False)
 
     # חזרה הביתה
@@ -187,10 +182,8 @@ def run_5():
 
     #שפיכת יחידות האנרגיה למשימה 
 
-    ilan.pid_gyro(8,270,precise_distance = False)
-    # ilan.wait_for_button("sdd", True)
-    # wait(500)
-    
+    ilan.pid_gyro(8,270,precise_distance = False)    
+    ilan.wait_for_button("test")
 
     #לקיחת יחידת האנרגיה וחזרה הביתה
 

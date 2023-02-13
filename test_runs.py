@@ -1,6 +1,8 @@
 #!/usr/bin/env pybricks-micropython
 
-from robot import *
+from robot import Robot
+from pybricks.parameters import Button, Color, Stop
+from pybricks.tools import StopWatch, wait
 import time
 from functools import wraps
 
@@ -29,31 +31,19 @@ def run_1():
 
     #  ביצוע משימה M15
     # 2023-01-18 rtm changed the run - added slide in front of arm. More accurate - so reduced 4->3 times push
-
-    ilan.pid_gyro(14,precise_distance = False)
+    ilan.speed_formula(33,300)
+    ilan.pid_gyro(10,200,False,precise_distance = False)
     ilan.turn(-45)
-    ilan.speed_formula(52,500)
-    
-    # התיישרות על משימה M14
-
+    ilan.speed_formula(47,400) 
     ilan.turn(90)
-    ilan.pid_gyro(8,Forward_Is_True = False,precise_distance = False)
-    ilan.pid_gyro(16,precise_distance = False)
-
-    #  ביצוע משימה M15
-     
-    for i in range (3):
-        ilan.pid_gyro(12 + i,200,precise_distance = False)
+    ilan.drive_by_seconds(120,2)
+    for i in range(4):
+        ilan.drive_by_seconds(120,1)
         wait(500)
-        ilan.pid_gyro(12,200,Forward_Is_True = False,precise_distance = False)
-
-    # חזרה הביתה
-
-    ilan.pid_gyro(5,400,Forward_Is_True =  False,precise_distance = False)
-    ilan.turn(90,200)
-    ilan.pid_gyro(58,400,precise_distance = False)
-
-
+        ilan.pid_gyro(3.5,Forward_Is_True = False,precise_distance = False)
+    ilan.pid_gyro(10,200,False,precise_distance = False)
+    ilan.turn(100)
+    ilan.speed_formula(60,500)
 
 @timeit
 def run_2():
@@ -62,19 +52,23 @@ def run_2():
 
     #  ביצוע משימה M08 
 
-    ilan.speed_formula(41 ,400)
-    ilan.speed_formula(49,400,False)
+    ilan.speed_formula(47 ,300,False)
+    ilan.speed_formula(51,500)
 
     # ביצוע משימה M14
     #2023-01-21 rtm Add wait for button so we can lower the alignment tool manually
+    ilan.beep()
     ilan.wait_for_button("Before Turn",True)
-    ilan.turn(-50,150)
-    ilan.speed_formula(45,300)
-    ilan.pid_gyro(2,100)
+    ilan.beep()
+    # ilan.turn(-52,200)
+    # ilan.speed_formula(48,400)
+    # # ilan.run_seconds(0.5,100)
+        
+    # ilan.pid_gyro(2,100)
 
     # חזרה הביתה
 
-    ilan.speed_formula(42,500,False)
+    # ilan.speed_formula(42,500,False)
 
 
 
@@ -82,11 +76,13 @@ def run_2():
 def run_3():
     #Worked well 14/1/23
     #ilan.pid_gyro(65,200,precise_distance = False)
-    ilan.speed_formula(74, 450)
+    ilan.speed_formula(68, 450)
+    ilan.pid_follow_line(2, 100, ilan.color_sensor_right, white_is_right=False)
     #ilan.wait_for_button("1",True)
     #ilan.pid_follow_line_until_other_detect_color(1,ilan.color_sensor_left,ilan.color_sensor_right,80,False, kp=0.72, ki=0.02, kd=0.076)
     #ilan.pid_gyro(9,80,False)
     ilan.left_medium_motor.run_angle(400,-100)
+    ilan.pid_follow_line(17, 100, ilan.color_sensor_right, white_is_right=False)
     #ilan.wait_for_button("2",True)
     #ilan.pid_gyro(4,80)
     #ilan.turn(-2, 70)
@@ -270,39 +266,63 @@ def running ():
     
     """!! One Function To Rule Them All !!"""
 
-    situation = "1-4"
-    ilan.write("\t2\n3   v   1\n\t4")
+    ilan.beep()
+        # ilan.write(TEXT_MENU)
+       
+    Runs = [
+        ("Run 1", run_1),
+        ("Run 2", run_2),
+        ("Run 3", run_3),
+        ("Run 4", run_4),
+        ("Run 5", run_5),
+        ("Run 6", run_6b) 
+    ]
+
+    current_run = 0
+
+    elsapsed_time = StopWatch()
 
     while True:
 
-        if Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "1-4":
-            run_1()
-        elif  Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "3-6":
-            run_5()
+        try:
         
-        if Button.UP in ilan.ev3.buttons.pressed() and situation == "1-4":
-            run_2()
-        elif  Button.UP in ilan.ev3.buttons.pressed() and situation == "3-6":
-            run_6b()
 
-        if Button.LEFT in ilan.ev3.buttons.pressed():
-            run_3()
+            if (Button.UP in ilan.ev3.buttons.pressed()):
+                current_run += 1
 
-        if Button.DOWN in ilan.ev3.buttons.pressed():
-            run_4()
+                if current_run >= len(Runs):
+                    current_run = 0
+                    
+                ilan.write(Runs[current_run][0])
 
-        if Button.CENTER in ilan.ev3.buttons.pressed() and situation == "1-4":
-            situation = "3-6"
-            ilan.write("\t6\n3\t5\n\t4")
+                wait(300)
 
-        elif Button.CENTER in ilan.ev3.buttons.pressed() and situation == "3-6":
-            situation = "1-4"
-            ilan.write("\t2\n3\t1\n\t4")
+            if (Button.DOWN in ilan.ev3.buttons.pressed()):
+                current_run -= 1
 
+                if current_run < 0:
+                    current_run = len(Runs) - 1
+            
+                ilan.write(Runs[current_run][0])
+                
+                wait(300)
 
+            if Button.CENTER in ilan.ev3.buttons.pressed():
 
-    # except Exception as ex:
-    # print("Error: {}".format(ex))
-    # wait(2500)
+                if current_run == 0:
+                    elsapsed_time.reset()
 
+                Runs[current_run][1]()
+            
+                current_run += 1
+
+                if current_run >= len(Runs):
+                    current_run = 0
+
+                ilan.write("Elapsed: {} s \n{}".format(round(elsapsed_time.time()/1000.0, 1), Runs[current_run][0]))
+        except Exception as EX :
+            print(str(EX))
+            wait(1500)
+            
+            
 running()

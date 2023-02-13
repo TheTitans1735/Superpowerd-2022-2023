@@ -763,12 +763,13 @@ class Robot:
         # הדפסת הטקסט הנתון
         self.write(text)
         self.check_forced_exit()
-        
+
         if not debug:
             return
         
         # חכה ללחיצת כפתור
         while not any(self.ev3.buttons.pressed()):
+            self.check_forced_exit()
             wait(10)
                 
 
