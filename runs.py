@@ -44,8 +44,11 @@ def run_1():
     ilan.pid_gyro(4,200,False,precise_distance = False)
     ilan.turn(90)
     ilan.drive_by_seconds(-300,1)
+    ilan.turn_until_seconds(2,10)
+    ilan.speed_formula(15,500)
     ilan.turn(10)
-    ilan.speed_formula(85,500)
+    ilan.speed_formula(65,500)
+
 
 @timeit
 def run_2():
