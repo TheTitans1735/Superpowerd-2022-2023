@@ -41,7 +41,7 @@ def run_1():
         ilan.drive_by_seconds(120,1)
         wait(500)
         ilan.pid_gyro(3.5,Forward_Is_True = False,precise_distance = False)
-    ilan.pid_gyro(4,200,False,precise_distance = False)
+    ilan.pid_gyro(7,200,False,precise_distance = False)
     ilan.turn(90)
     ilan.drive_by_seconds(-300,1)
     ilan.turn_until_seconds(2,10)
@@ -299,10 +299,13 @@ def running ():
                     current_run = 0
 
                 wait(300)
-
-                ilan.write("Last run: {} s \nTotal: {} s \n{}".format(round(run_time, 1), round(elsapsed_time.time()/1000.0, 1), Runs[current_run][0]))
-        except Exception as EX :
-            ilan.write("{}\nLast run: {} s \nTotal: {} s".format(str(EX), round(run_time, 1), round(elsapsed_time.time()/1000.0, 1)))
+                
+                ilan.write("Last run: {} s \nTotal: {} s \n{}\n\nBattery:\n {}V\n {}mA".format(round(run_time, 1), round(elsapsed_time.time()/1000.0, 1), Runs[current_run][0], round(ilan.ev3.battery.voltage()/1000.0, 1), ilan.ev3.battery.current()))
+        except Exception as EX:
+            if run_time is None:
+                ilan.write("Run missing '@timeit'\n{}\nTotal: {} s".format(str(EX), round(elsapsed_time.time()/1000.0, 1)))
+            else:
+                ilan.write("{}\nLast run: {} s \nTotal: {} s".format(str(EX), round(run_time, 1), round(elsapsed_time.time()/1000.0, 1)))
             wait(1500)
             
             
