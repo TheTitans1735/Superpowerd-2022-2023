@@ -6,6 +6,12 @@ from robot import *
 
 '''
 Move the wall accordingly to the buttons
+
+drive:          right
+                  |
+          up <---stop---> down
+                  |
+                left
 '''
             
 ilan = Robot()
@@ -14,7 +20,7 @@ default_speed = 150
 speed = default_speed # Start with default speed
 
 situation = "motor"
-ilan.write("motor")
+ilan.write("default: motor")
 
 if_wait = True
 ilan.gyro_sensor.reset_angle(0)
@@ -26,13 +32,24 @@ while True:
     while True:
         motor_speed = 250
         situation == "motor"
+        #motor
         if Button.CENTER in ilan.ev3.buttons.pressed() and situation == "motor":  
             situation = "drive"
-            print("situation is:" + situation)
+            ilan.write("!!wait!!")
+            wait(500)
+            ilan.write("situation: drive\n\ncontroller:\n\t\t\tright\t\t\t\n  up\t\t\tdown\n\t\t\tleft\t\t\t\t")
 
         elif Button.CENTER in ilan.ev3.buttons.pressed() and situation == "drive":
             situation = "motor"
-            print("situation is:" + situation)
+            ilan.write("!!wait!!")
+            wait(500)
+            ilan.write("situation: motor")
+#               right
+#                  |
+#          up <---stop---> down
+#                  |
+#                left
+
 
         angle = str(ilan.gyro_sensor.angle())
         if Button.UP in ilan.ev3.buttons.pressed() and situation == "motor":
@@ -47,19 +64,20 @@ while True:
         elif Button.LEFT in ilan.ev3.buttons.pressed() and situation == "motor":
                 ilan.left_medium_motor.run(motor_speed)
 
-        elif Button.UP in ilan.ev3.buttons.pressed() and situation == "drive":
-                ilan.right_motor.run(motor_speed)
-                ilan.right_motor.run(motor_speed)
-
+        # drive
         elif Button.RIGHT in ilan.ev3.buttons.pressed() and situation == "drive":
-                ilan.right_motor.run(-1 * motor_speed)
+                ilan.right_motor.run(motor_speed)
                 ilan.left_motor.run(motor_speed)
 
         elif Button.DOWN in ilan.ev3.buttons.pressed() and situation == "drive":
+                ilan.right_motor.run(-1 * motor_speed)
+                ilan.left_motor.run(motor_speed)
+
+        elif Button.LEFT in ilan.ev3.buttons.pressed() and situation == "drive":
                 ilan.left_motor.run(-1 * motor_speed)
                 ilan.right_motor.run(-1 * motor_speed)
 
-        elif Button.LEFT in ilan.ev3.buttons.pressed() and situation == "drive":
+        elif Button.UP in ilan.ev3.buttons.pressed() and situation == "drive":
                 ilan.right_motor.run(motor_speed)
                 ilan.left_motor.run(-1 * motor_speed)
         else:
